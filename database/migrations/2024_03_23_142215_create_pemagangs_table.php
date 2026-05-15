@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('karyawan', function (Blueprint $table) {
+        Schema::create('pemagang', function (Blueprint $table) {
             $table->string('nik')->primary();
-            $table->foreignId('departemen_id')->constrained('departemen', 'id');
+            $table->foreignId('instansi_id')->constrained('instansi', 'id');
             $table->string('nama_lengkap');
             $table->string('foto')->nullable();
             $table->string('jabatan');
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('karyawan');
+        Schema::dropIfExists('pemagang');
     }
 };

@@ -1,334 +1,355 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                {{ __("Data Karyawan") }}
-            </h2>
-            <label class="btn btn-primary btn-sm" for="create_modal">Tambah Data</label>
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gov-primary rounded-lg flex items-center justify-center text-white">
+                    <i class="ri-team-fill text-lg"></i>
+                </div>
+                <h2 class="text-2xl font-bold leading-tight text-gov-primary">
+                    {{ __('Data Pemagang') }}
+                </h2>
+            </div>
+            <label class="gov-btn-primary cursor-pointer" for="create_modal">
+                <i class="ri-add-line"></i>
+                Tambah Pemagang
+            </label>
         </div>
     </x-slot>
 
-    <div class="container mx-auto px-5 pt-5">
-        <div>
-            <form action="{{ route("admin.karyawan") }}" method="get" enctype="multipart/form-data" class="my-3">
-                <div class="flex w-full flex-wrap gap-2 md:flex-nowrap">
-                    <input type="text" name="nama_karyawan" placeholder="Nama Karyawan" class="input input-bordered w-full md:w-1/2" value="{{ request()->nama_karyawan }}" />
-                    <select class="select select-bordered w-full md:w-1/2" name="kode_departemen">
-                        <option disabled selected>Pilih departemen!</option>
-                        @foreach ($departemen as $item)
-                            <option value="{{ $item->kode }}" @if ($item->kode == request()->kode_departemen) selected @endif>{{ $item->nama }}</option>
-                        @endforeach
-                    </select>
-                    <button type="submit" class="btn btn-success w-full md:w-14">
-                        <i class="ri-search-2-line text-lg text-white"></i>
-                    </button>
+    <div class="space-y-6">
+        <!-- Search & Filter Section -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <form action="{{ route('admin.pemagang') }}" method="get" enctype="multipart/form-data" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="gov-form-label">Nama Pemagang</label>
+                        <input type="text" name="nama_pemagang" placeholder="Cari nama..." class="gov-form-input"
+                            value="{{ request()->nama_pemagang }}" />
+                    </div>
+                    <div>
+                        <label class="gov-form-label">Departemen</label>
+                        <select class="gov-form-input" name="kode_departemen">
+                            <option value="">-- Pilih Departemen --</option>
+                            @foreach ($departemen as $item)
+                                <option value="{{ $item->kode }}" @if ($item->kode == request()->kode_departemen) selected @endif>
+                                    {{ $item->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="gov-btn-primary w-full">
+                            <i class="ri-search-2-line"></i>
+                            Cari
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
-        <div class="w-full overflow-x-auto rounded-md bg-slate-200 px-10">
-            <table id="tabelPresensi" class="table mb-4 w-full border-collapse items-center border-gray-200 align-top dark:border-white/40">
-                <thead class="text-sm text-gray-800 dark:text-gray-300">
-                    <tr>
-                        <th></th>
-                        <th>Departemen</th>
-                        <th>Nama Lengkap</th>
-                        <th>Foto</th>
-                        <th>Jabatan</th>
-                        <th>Telepon</th>
-                        <th>Email</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($karyawan as $value => $item)
-                        <tr class="hover">
-                            <td class="font-bold">{{ $karyawan->firstItem() + $value }}</td>
-                            <td class="text-slate-500 dark:text-slate-300">{{ $item->departemen->kode }}</td>
-                            <td class="text-slate-500 dark:text-slate-300">{{ $item->nama_lengkap }}</td>
-                            <td>
-                                <div class="avatar">
-                                    <div class="w-12 rounded-xl">
-                                        @if ($item->foto)
-                                            <img src="{{ asset("storage/unggah/karyawan/$item->foto") }}" />
-                                        @else
-                                            <img src="{{ asset("img/team-2.jpg") }}" />
-                                        @endif
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-slate-500 dark:text-slate-300">{{ $item->jabatan }}</td>
-                            <td class="text-slate-500 dark:text-slate-300">{{ $item->telepon }}</td>
-                            <td class="text-slate-500 dark:text-slate-300">{{ $item->email }}</td>
-                            <td>
-                                <label class="btn btn-warning btn-sm" for="edit_button" onclick="return edit_button('{{ $item->nik }}')">
-                                    <i class="ri-pencil-fill"></i>
-                                </label>
-                                <label class="btn btn-error btn-sm" onclick="return delete_button('{{ $item->nik }}', '{{ $item->nama_lengkap }}')">
-                                    <i class="ri-delete-bin-line"></i>
-                                </label>
-                            </td>
+
+        <!-- Table Section -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="gov-table w-full">
+                    <thead class="bg-gradient-to-r from-gov-primary to-blue-900 text-white">
+                        <tr>
+                            <th class="px-4 py-3 text-left font-semibold">#</th>
+                            <th class="px-4 py-3 text-left font-semibold">Departemen</th>
+                            <th class="px-4 py-3 text-left font-semibold">Nama Lengkap</th>
+                            <th class="px-4 py-3 text-left font-semibold">Jabatan</th>
+                            <th class="px-4 py-3 text-left font-semibold">Telepon</th>
+                            <th class="px-4 py-3 text-left font-semibold">Email</th>
+                            <th class="px-4 py-3 text-center font-semibold">Aksi</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <div class="mx-3 mb-5">
-                {{ $karyawan->links() }}
+                    </thead>
+                    <tbody>
+                        @foreach ($pemagang as $value => $item)
+                            <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-3 font-semibold text-gray-700">{{ $pemagang->firstItem() + $value }}
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="gov-badge-primary">{{ $item->departemen->kode }}</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center space-x-3">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                                            @if ($item->foto)
+                                                <img src="{{ asset("storage/unggah/pemagang/$item->foto") }}"
+                                                    class="w-full h-full object-cover" />
+                                            @else
+                                                <i class="ri-user-line text-gray-400"></i>
+                                            @endif
+                                        </div>
+                                        <span class="font-medium text-gray-800">{{ $item->nama_lengkap }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-gray-600">{{ $item->jabatan }}</td>
+                                <td class="px-4 py-3 text-gray-600">{{ $item->telepon }}</td>
+                                <td class="px-4 py-3 text-gray-600 text-sm">{{ $item->email }}</td>
+                                <td class="px-4 py-3 text-center">
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <label class="gov-btn-primary py-1 px-3 cursor-pointer" for="edit_button"
+                                            onclick="return edit_button('{{ $item->nik }}')">
+                                            <i class="ri-pencil-line"></i>
+                                        </label>
+                                        <button class="gov-btn-danger py-1 px-3"
+                                            onclick="return delete_button('{{ $item->nik }}', '{{ $item->nama_lengkap }}')">
+                                            <i class="ri-delete-bin-2-line"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                {{ $pemagang->links() }}
             </div>
         </div>
     </div>
 
-    {{-- Awal Modal Create --}}
+    {{-- Modal Create --}}
     <input type="checkbox" id="create_modal" class="modal-toggle" />
     <div class="modal" role="dialog">
-        <div class="modal-box">
-            <div class="mb-3 flex justify-between">
-                <h3 class="text-lg font-bold">Tambah {{ $title }}</h3>
-                <label for="create_modal" class="cursor-pointer">
-                    <i class="ri-close-large-fill"></i>
+        <div class="modal-box w-11/12 max-w-2xl">
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+                <h3 class="text-xl font-bold text-gov-primary">Tambah {{ $title }}</h3>
+                <label for="create_modal" class="cursor-pointer text-gray-500 hover:text-gray-700">
+                    <i class="ri-close-large-fill text-xl"></i>
                 </label>
             </div>
-            <div>
-                <form action="{{ route("admin.karyawan.store") }}" method="POST" enctype="multipart/form-data">
+
+            <div class="max-h-96 overflow-y-auto">
+                <form action="{{ route('admin.pemagang.store') }}" method="POST" enctype="multipart/form-data"
+                    class="space-y-4">
                     @csrf
-                    <button type="reset" class="btn btn-neutral btn-sm">Reset</button>
-                    <label class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">NIK<span class="text-red-500">*</span></span>
-                            </span>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- NIK -->
+                        <div>
+                            <label class="gov-form-label">NIK <span class="text-red-500">*</span></label>
+                            <input type="text" name="nik" placeholder="Nomor Induk Pemagang"
+                                class="gov-form-input" value="{{ old('nik') }}" required />
+                            @error('nik')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <input type="text" name="nik" placeholder="NIK" class="input input-bordered w-full text-blue-700" value="{{ old("nik") }}" required />
-                        @error("nik")
-                            <div class="label">
-                                <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">Departemen<span class="text-red-500">*</span></span>
-                            </span>
+
+                        <!-- Departemen -->
+                        <div>
+                            <label class="gov-form-label">Departemen <span class="text-red-500">*</span></label>
+                            <select name="departemen_id" class="gov-form-input" required>
+                                <option disabled selected>Pilih Departemen</option>
+                                @foreach ($departemen as $item)
+                                    <option value="{{ $item->id }}"
+                                        @if ($item->id == old('departemen_id')) selected @endif>{{ $item->nama }}</option>
+                                @endforeach
+                            </select>
+                            @error('departemen_id')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <select name="departemen_id" class="select select-bordered w-full text-blue-700">
-                            <option disabled selected>Pilih Departemen!</option>
-                            @foreach ($departemen as $item)
-                                <option value="{{ $item->id }}" @if ($item->id == old("departemen_id")) selected @endif>{{ $item->nama }}</option>
-                            @endforeach
-                        </select>
-                        @error("departemen_id")
-                            <div class="label">
-                                <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">Nama Lengkap<span class="text-red-500">*</span></span>
-                            </span>
+
+                        <!-- Nama Lengkap -->
+                        <div>
+                            <label class="gov-form-label">Nama Lengkap <span class="text-red-500">*</span></label>
+                            <input type="text" name="nama_lengkap" placeholder="Nama Lengkap"
+                                class="gov-form-input" value="{{ old('nama_lengkap') }}" required />
+                            @error('nama_lengkap')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <input type="text" name="nama_lengkap" placeholder="Nama Lengkap" class="input input-bordered w-full text-blue-700" value="{{ old("nama_lengkap") }}" required />
-                        @error("nama_lengkap")
-                            <div class="label">
-                                <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">Jabatan<span class="text-red-500">*</span></span>
-                            </span>
+
+                        <!-- Jabatan -->
+                        <div>
+                            <label class="gov-form-label">Jabatan <span class="text-red-500">*</span></label>
+                            <input type="text" name="jabatan" placeholder="Jabatan" class="gov-form-input"
+                                value="{{ old('jabatan') }}" required />
+                            @error('jabatan')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <input type="text" name="jabatan" placeholder="Jabatan" class="input input-bordered w-full text-blue-700" value="{{ old("jabatan") }}" required />
-                        @error("jabatan")
-                            <div class="label">
-                                <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">Telepon<span class="text-red-500">*</span></span>
-                            </span>
+
+                        <!-- Telepon -->
+                        <div>
+                            <label class="gov-form-label">Telepon <span class="text-red-500">*</span></label>
+                            <input type="text" name="telepon" placeholder="Nomor Telepon" class="gov-form-input"
+                                value="{{ old('telepon') }}" required />
+                            @error('telepon')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <input type="text" name="telepon" placeholder="Telepon" class="input input-bordered w-full text-blue-700" value="{{ old("telepon") }}" required />
-                        @error("telepon")
-                            <div class="label">
-                                <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">Email<span class="text-red-500">*</span></span>
-                            </span>
+
+                        <!-- Email -->
+                        <div>
+                            <label class="gov-form-label">Email <span class="text-red-500">*</span></label>
+                            <input type="email" name="email" placeholder="Email" class="gov-form-input"
+                                value="{{ old('email') }}" required />
+                            @error('email')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <input type="email" name="email" placeholder="Email" class="input input-bordered w-full text-blue-700" value="{{ old("email") }}" required />
-                        @error("email")
-                            <div class="label">
-                                <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">Password<span class="text-red-500">*</span></span>
-                            </span>
+
+                        <!-- Password -->
+                        <div>
+                            <label class="gov-form-label">Password <span class="text-red-500">*</span></label>
+                            <input type="password" name="password" placeholder="Password" class="gov-form-input"
+                                value="{{ old('password') }}" required />
+                            @error('password')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <input type="password" name="password" placeholder="Password" class="input input-bordered w-full text-blue-700" value="{{ old("password") }}" required />
-                        @error("password")
-                            <div class="label">
-                                <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">Foto</span>
-                            </span>
+
+                        <!-- Foto -->
+                        <div class="md:col-span-2">
+                            <label class="gov-form-label">Foto</label>
+                            <input type="file" name="foto" id="foto" class="gov-form-input"
+                                onchange="previewImage()" />
+                            @error('foto')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        @error("foto")
-                            <div class="label">
-                                <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
-                        <div class="md:flex-0 mt-6 w-full max-w-full shrink-0 px-3 md:mt-0 md:w-4/12">
-                            <input type="file" name="foto" id="foto" class="file-input file-input-bordered file-input-sm w-full" onchange="previewImage()" />
+
+                        <div class="md:col-span-2">
+                            <img class="img-preview my-3 rounded-lg max-h-48 hidden" />
                         </div>
-                        <img class="img-preview my-3 rounded" />
-                    </label>
-                    <button type="submit" class="btn btn-success form-control w-full text-white">Simpan</button>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200 mt-6">
+                        <label for="create_modal" class="gov-btn-secondary">Batal</label>
+                        <button type="reset" class="gov-btn-secondary">Reset</button>
+                        <button type="submit" class="gov-btn-primary">
+                            <i class="ri-save-line"></i>
+                            Simpan
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
-    {{-- Akhir Modal Create --}}
+    {{-- End Modal Create --}}
 
-    {{-- Awal Modal Edit --}}
+    {{-- Modal Edit --}}
     <input type="checkbox" id="edit_button" class="modal-toggle" />
     <div class="modal" role="dialog">
-        <div class="modal-box">
-            <div class="mb-3 flex justify-between">
-                <h3 class="text-lg font-bold">Ubah {{ $title }}</h3>
-                <label for="edit_button" class="cursor-pointer">
-                    <i class="ri-close-large-fill"></i>
+        <div class="modal-box w-11/12 max-w-2xl">
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+                <h3 class="text-xl font-bold text-gov-primary">Edit {{ $title }}</h3>
+                <label for="edit_button" class="cursor-pointer text-gray-500 hover:text-gray-700">
+                    <i class="ri-close-large-fill text-xl"></i>
                 </label>
             </div>
-            <div>
-                <form action="{{ route("admin.karyawan.update") }}" method="POST" enctype="multipart/form-data">
+
+            <div class="max-h-96 overflow-y-auto">
+                <form action="{{ route('admin.pemagang.update') }}" method="POST" enctype="multipart/form-data"
+                    class="space-y-4">
                     @csrf
                     <input type="text" name="nik_lama" hidden>
-                    <label class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold">NIK<span class="text-red-500">*</span></span>
-                            <span class="label-text-alt" id="loading_edit1"></span>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- NIK -->
+                        <div>
+                            <label class="gov-form-label">NIK <span class="text-red-500">*</span></label>
+                            <input type="text" name="nik" placeholder="Nomor Induk Pemagang"
+                                class="gov-form-input" required />
+                            @error('nik')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <input type="text" name="nik" placeholder="NIK" class="input input-bordered w-full text-blue-700" required />
-                        @error("nik")
-                            <div class="label">
-                                <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold">Departemen<span class="text-red-500">*</span></span>
-                            <span class="label-text-alt" id="loading_edit2"></span>
+
+                        <!-- Departemen -->
+                        <div>
+                            <label class="gov-form-label">Departemen <span class="text-red-500">*</span></label>
+                            <select name="departemen_id" id="departemen_id" class="gov-form-input" required>
+                            </select>
+                            @error('departemen_id')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <select name="departemen_id" id='departemen_id' class="select select-bordered w-full text-blue-700">
-                        </select>
-                        @error("departemen_id")
-                            <div class="label">
-                                <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold">Nama Lengkap<span class="text-red-500">*</span></span>
-                            <span class="label-text-alt" id="loading_edit3"></span>
+
+                        <!-- Nama Lengkap -->
+                        <div>
+                            <label class="gov-form-label">Nama Lengkap <span class="text-red-500">*</span></label>
+                            <input type="text" name="nama_lengkap" placeholder="Nama Lengkap"
+                                class="gov-form-input" required />
+                            @error('nama_lengkap')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <input type="text" name="nama_lengkap" placeholder="Nama Lengkap" class="input input-bordered w-full text-blue-700" required />
-                        @error("nama_lengkap")
-                            <div class="label">
-                                <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold">Jabatan<span class="text-red-500">*</span></span>
-                            <span class="label-text-alt" id="loading_edit4"></span>
+
+                        <!-- Jabatan -->
+                        <div>
+                            <label class="gov-form-label">Jabatan <span class="text-red-500">*</span></label>
+                            <input type="text" name="jabatan" placeholder="Jabatan" class="gov-form-input"
+                                required />
+                            @error('jabatan')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <input type="text" name="jabatan" placeholder="Jabatan" class="input input-bordered w-full text-blue-700" required />
-                        @error("jabatan")
-                            <div class="label">
-                                <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold">Telepon<span class="text-red-500">*</span></span>
-                            <span class="label-text-alt" id="loading_edit5"></span>
+
+                        <!-- Telepon -->
+                        <div>
+                            <label class="gov-form-label">Telepon <span class="text-red-500">*</span></label>
+                            <input type="text" name="telepon" placeholder="Nomor Telepon" class="gov-form-input"
+                                required />
+                            @error('telepon')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <input type="text" name="telepon" placeholder="Telepon" class="input input-bordered w-full text-blue-700" required />
-                        @error("telepon")
-                            <div class="label">
-                                <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold">Email<span class="text-red-500">*</span></span>
-                            <span class="label-text-alt" id="loading_edit6"></span>
+
+                        <!-- Email -->
+                        <div>
+                            <label class="gov-form-label">Email <span class="text-red-500">*</span></label>
+                            <input type="email" name="email" placeholder="Email" class="gov-form-input"
+                                required />
+                            @error('email')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <input type="email" name="email" placeholder="Email" class="input input-bordered w-full text-blue-700" required />
-                        @error("email")
-                            <div class="label">
-                                <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold">Foto</span>
-                            <span class="label-text-alt" id="loading_edit7"></span>
+
+                        <!-- Foto -->
+                        <div class="md:col-span-2">
+                            <label class="gov-form-label">Foto</label>
+                            <input type="file" name="foto" id="foto_edit" class="gov-form-input"
+                                onchange="previewImageEdit()" />
+                            @error('foto')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        @error("foto")
-                            <div class="label">
-                                <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
-                        <div class="md:flex-0 mt-6 w-full max-w-full shrink-0 px-3 md:mt-0 md:w-4/12">
-                            <input type="file" name="foto" id="foto_edit" class="file-input file-input-bordered file-input-sm w-full" onchange="previewImageEdit()" />
+
+                        <div class="md:col-span-2">
+                            <img class="foto-edit-preview my-3 rounded-lg max-h-48 hidden" />
                         </div>
-                        <img class="foto-edit-preview my-3 rounded" />
-                    </label>
-                    <button type="submit" class="btn btn-warning form-control w-full text-slate-700">Perbarui</button>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200 mt-6">
+                        <label for="edit_button" class="gov-btn-secondary">Batal</label>
+                        <button type="submit" class="gov-btn-primary">
+                            <i class="ri-check-line"></i>
+                            Perbarui
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
-    {{-- Akhir Modal Edit --}}
+    {{-- End Modal Edit --}}
 
     <script>
         function previewImage() {
             const image = document.querySelector('#foto');
             const imgPreview = document.querySelector('.img-preview');
 
-            imgPreview.style.display = 'block';
+            if (!image.files || !image.files[0]) return;
 
+            imgPreview.style.display = 'block';
             const oFReader = new FileReader();
             oFReader.readAsDataURL(image.files[0]);
-
             oFReader.onload = function(oFREvent) {
                 imgPreview.src = oFREvent.target.result;
             }
@@ -338,58 +359,47 @@
             const image = document.querySelector('#foto_edit');
             const imgPreview = document.querySelector('.foto-edit-preview');
 
-            imgPreview.style.display = 'block';
+            if (!image.files || !image.files[0]) return;
 
+            imgPreview.style.display = 'block';
             const oFReader = new FileReader();
             oFReader.readAsDataURL(image.files[0]);
-
             oFReader.onload = function(oFREvent) {
                 imgPreview.src = oFREvent.target.result;
             }
         }
 
-        @if (session()->has("success"))
+        @if (session()->has('success'))
             Swal.fire({
                 title: 'Berhasil',
-                text: '{{ session("success") }}',
+                text: '{{ session('success') }}',
                 icon: 'success',
-                confirmButtonColor: '#6419E6',
+                confirmButtonColor: '#003DA5',
                 confirmButtonText: 'OK',
             });
         @endif
 
-        @if (session()->has("error"))
+        @if (session()->has('error'))
             Swal.fire({
                 title: 'Gagal',
-                text: '{{ session("error") }}',
+                text: '{{ session('error') }}',
                 icon: 'error',
-                confirmButtonColor: '#6419E6',
+                confirmButtonColor: '#003DA5',
                 confirmButtonText: 'OK',
             });
         @endif
 
         function edit_button(nik) {
-            // Loading effect start
-            let loading = `<span class="loading loading-dots loading-md text-purple-600"></span>`;
-            $("#loading_edit1").html(loading);
-            $("#loading_edit2").html(loading);
-            $("#loading_edit3").html(loading);
-            $("#loading_edit4").html(loading);
-            $("#loading_edit5").html(loading);
-            $("#loading_edit6").html(loading);
-            $("#loading_edit7").html(loading);
-
             $("select[id='departemen_id']").children().remove().end();
 
             $.ajax({
                 type: "get",
-                url: "{{ route('admin.karyawan.edit') }}",
+                url: "{{ route('admin.pemagang.edit') }}",
                 data: {
                     "_token": "{{ csrf_token() }}",
                     "nik": nik
                 },
                 success: function(data) {
-                    // console.log(data);
                     let items = [];
                     $.each(data, function(key, val) {
                         items.push(val);
@@ -403,7 +413,7 @@
                     $("input[name='email']").val(items[6]);
 
                     const departemen = @json($departemen);
-                    let options = '<option disabled>Pilih Departemen!</option>';
+                    let options = '<option disabled>Pilih Departemen</option>';
                     departemen.forEach(item => {
                         const isSelected = item.id == items[1] ? 'selected' : '';
                         options += `<option value="${item.id}" ${isSelected}>${item.nama}</option>`;
@@ -411,20 +421,13 @@
                     $("select[id='departemen_id']").html(options);
 
                     if (items[3] != null) {
-                        $(".foto-edit-preview").attr("src", `{{ asset('storage/unggah/karyawan/${items[3]}') }}`);
+                        $(".foto-edit-preview").attr("src",
+                            `{{ asset('storage/unggah/pemagang/${items[3]}') }}`);
+                        $(".foto-edit-preview").css("display", "block");
                     } else {
                         $(".foto-edit-preview").attr("src", ``);
+                        $(".foto-edit-preview").css("display", "none");
                     }
-
-                    // Loading effect end
-                    loading = "";
-                    $("#loading_edit1").html(loading);
-                    $("#loading_edit2").html(loading);
-                    $("#loading_edit3").html(loading);
-                    $("#loading_edit4").html(loading);
-                    $("#loading_edit5").html(loading);
-                    $("#loading_edit6").html(loading);
-                    $("#loading_edit7").html(loading);
                 }
             });
         }
@@ -435,19 +438,19 @@
                 html: "<p>Data yang dihapus tidak dapat dipulihkan kembali!</p>" +
                     "<div class='divider'></div>" +
                     "<div class='flex flex-col'>" +
-                    "<b>Karyawan: " + nama + "</b>" +
+                    "<b>Pemagang: " + nama + "</b>" +
                     "</div>",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#6419E6',
-                cancelButtonColor: '#F87272',
+                confirmButtonColor: '#003DA5',
+                cancelButtonColor: '#D32F2F',
                 confirmButtonText: 'Hapus',
                 cancelButtonText: 'Batal',
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
                         type: "post",
-                        url: "{{ route('admin.karyawan.delete') }}",
+                        url: "{{ route('admin.pemagang.delete') }}",
                         data: {
                             "_token": "{{ csrf_token() }}",
                             "nik": nik
@@ -457,7 +460,7 @@
                                 title: 'Berhasil',
                                 text: response.message,
                                 icon: 'success',
-                                confirmButtonColor: '#6419E6',
+                                confirmButtonColor: '#003DA5',
                                 confirmButtonText: 'OK'
                             }).then((result) => {
                                 if (result.isConfirmed) {

@@ -13,12 +13,12 @@
 
         <div class="mt-2 flex grow items-center sm:mr-6 sm:mt-0 md:mr-0 lg:flex lg:basis-auto">
             <div class="flex items-center md:ml-auto md:pr-4">
-                <div class="ease relative flex w-full flex-wrap items-stretch rounded-lg transition-all">
+                <!-- <div class="ease relative flex w-full flex-wrap items-stretch rounded-lg transition-all">
                     <span class="ease leading-5.6 absolute z-50 -ml-px flex h-full items-center whitespace-nowrap rounded-lg rounded-br-none rounded-tr-none border border-r-0 border-transparent bg-transparent px-2.5 py-2 text-center text-sm font-normal text-slate-500 transition-all">
                         <i class="ri-search-line"></i>
                     </span>
                     <input type="text" class="focus:shadow-primary-outline ease w-1/100 leading-5.6 dark:bg-slate-850 relative -ml-px block min-w-0 flex-auto rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 pl-9 pr-3 text-sm text-gray-700 transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:transition-shadow dark:text-white" placeholder="Type here..." />
-                </div>
+                </div> -->
             </div>
             <ul class="md-max:w-full mb-0 flex list-none flex-row justify-end pl-0">
                 {{-- Dark mode switcher --}}
@@ -125,17 +125,17 @@
                     </button>
                 </li>
                 <li class="flex items-center pl-4 xl:pr-4">
-                    <a href="{{ route("karyawan.profile") }}" class="ease-nav-brand block px-0 py-2 text-sm font-semibold text-white transition-all">
-                        @if (Auth::guard("karyawan")->user()->foto)
+                    <a href="{{ route("pemagang.profile") }}" class="ease-nav-brand block px-0 py-2 text-sm font-semibold text-white transition-all">
+                        @if (Auth::guard("pemagang")->user()->foto)
                             <div class="avatar">
                                 <div class="w-6 rounded-full">
-                                    <img src="{{ asset("storage/unggah/karyawan/" . Auth::guard("karyawan")->user()->foto) }}" />
+                                    <img src="{{ asset("storage/unggah/pemagang/" . Auth::guard("pemagang")->user()->foto) }}" />
                                 </div>
                             </div>
                         @else
                             <i class="ri-user-3-fill sm:mr-1"></i>
                         @endif
-                        <span class="hidden sm:inline">{{ Auth::guard("karyawan")->user()->nama_lengkap }}</span>
+                        <span class="hidden sm:inline">{{ Auth::guard("pemagang")->user()->nama_lengkap }}</span>
                     </a>
                 </li>
                 <li class="flex items-center px-4 xl:hidden">
@@ -154,14 +154,14 @@
                 </li> --}}
 
                 <!-- notifications -->
-                <li class="relative flex items-center pr-2">
+                <!-- <li class="relative flex items-center pr-2">
                     <p class="transform-dropdown-show hidden"></p>
                     <a href="javascript:;" class="ease-nav-brand block p-0 text-sm text-white transition-all" dropdown-trigger aria-expanded="false">
                         <i class="ri-notification-3-fill cursor-pointer"></i>
                     </a>
 
                     <ul dropdown-menu class="transform-dropdown before:font-awesome before:leading-default before:duration-350 before:ease lg:shadow-3xl duration-250 min-w-44 before:text-5.5 dark:shadow-dark-xl dark:bg-slate-850 pointer-events-none absolute right-0 top-0 z-50 origin-top list-none rounded-lg border-0 border-solid border-transparent bg-white bg-clip-padding px-2 py-4 text-left text-sm text-slate-500 opacity-0 transition-all before:absolute before:left-auto before:right-2 before:top-0 before:z-50 before:inline-block before:font-normal before:text-white before:antialiased before:transition-all before:content-['\f0d8'] sm:-mr-6 before:sm:right-8 lg:absolute lg:left-auto lg:right-0 lg:mt-2 lg:block lg:cursor-pointer">
-                        <!-- add show class on dropdown open js -->
+                        
                         <li class="relative mb-2">
                             <a class="ease py-1.2 clear-both block w-full whitespace-nowrap rounded-lg bg-transparent px-4 duration-300 hover:bg-gray-200 hover:text-slate-700 dark:hover:bg-slate-900 lg:transition-colors" href="javascript:;">
                                 <div class="flex py-1">
@@ -227,7 +227,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>

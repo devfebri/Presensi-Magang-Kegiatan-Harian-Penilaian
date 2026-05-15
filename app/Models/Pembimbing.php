@@ -6,22 +6,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Karyawan extends Authenticatable
+class Pembimbing extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = "karyawan";
-    protected $primaryKey = "nik";
-    protected $guard = "karyawan";
+    protected $table = 'pembimbing';
+    protected $guard = 'pembimbing';
 
     protected $fillable = [
-        'nik',
-        'departemen_id',
+        'instansi_id',
         'nama_lengkap',
-        'jabatan',
-        'telepon',
+        'nip',
         'email',
         'password',
+        'telepon',
+        'jabatan',
+        'foto',
     ];
 
     protected $hidden = [
@@ -32,12 +32,13 @@ class Karyawan extends Authenticatable
     protected function casts(): array
     {
         return [
-            'password' => 'hashed',
+            'email_verified_at' => 'datetime',
+            'password'          => 'hashed',
         ];
     }
 
-    public function departemen()
+    public function instansi()
     {
-        return $this->belongsTo(Departemen::class);
+        return $this->belongsTo(Instansi::class);
     }
 }

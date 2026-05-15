@@ -1,30 +1,59 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel Presensi') }}</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <title>{{ config('app.name', 'Sistem Informasi Manajemen WEB Kementerian Hukum Provinsi Jambi') }}</title>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #003DA5 0%, #1565C0 50%, #0D47A1 100%);
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-900 antialiased">
+    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
+        <!-- Logo Area -->
+        <div class="mb-8 text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-white rounded-xl shadow-lg mb-4">
+                <i class="ri-government-line text-3xl text-gov-primary"></i>
             </div>
-
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
-            </div>
+            <h1 class="text-3xl font-bold text-white">SIMWEB</h1>
+            <p class="text-blue-100 mt-2">Kantor Wilayah Kementerian Hukum Provinsi Jambi</p>
         </div>
-    </body>
+
+        <!-- Auth Form Card -->
+        <div class="w-full sm:max-w-md">
+            <div class="bg-white shadow-2xl overflow-hidden sm:rounded-2xl">
+                <!-- Card Header -->
+                <div class="bg-gradient-to-r from-gov-primary to-blue-900 px-6 py-8">
+                    <p class="text-white text-center text-lg font-semibold">
+                        {{ request()->is('register') ? 'Buat Akun Baru' : 'Masuk ke Sistem' }}</p>
+                </div>
+
+                <!-- Card Body -->
+                <div class="px-6 py-8">
+                    {{ $slot }}
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <p class="text-center text-white text-sm mt-6">
+                © 2026 SIMWEB | Kementerian Hukum Provinsi Jambi
+            </p>
+        </div>
+    </div>
+</body>
+
 </html>

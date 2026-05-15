@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Sistem Informasi Manajemen WEB Kementerian Hukum Provinsi Jambi'),
 
     /*
     |--------------------------------------------------------------------------

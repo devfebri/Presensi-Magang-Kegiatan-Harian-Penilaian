@@ -29,38 +29,38 @@
             border-collapse: collapse;
         }
 
-        .identitas-karyawan {
+        .identitas-pemagang {
             margin-top: 2rem;
         }
 
-        .identitas-karyawan td {
+        .identitas-pemagang td {
             padding: 0.25rem;
         }
 
-        .presensi-karyawan {
+        .presensi-pemagang {
             width: 100%;
             margin-top: 1.5rem;
         }
 
-        .presensi-karyawan tbody>tr>td {
+        .presensi-pemagang tbody>tr>td {
             text-align: center;
             padding: 0.5rem;
         }
 
-        .presensi-karyawan th {
+        .presensi-pemagang th {
             font-weight: bold;
             background: salmon;
             padding: 0.5rem;
             font-size: 14px;
         }
 
-        .presensi-karyawan>tbody>tr>td {
+        .presensi-pemagang>tbody>tr>td {
             font-size: 12px;
         }
 
-        .presensi-karyawan,
-        .presensi-karyawan>thead>tr>th,
-        .presensi-karyawan>tbody>tr>td {
+        .presensi-pemagang,
+        .presensi-pemagang>thead>tr>th,
+        .presensi-pemagang>tbody>tr>td {
             border: 1px solid black;
             padding: 0.5rem
         }
@@ -93,14 +93,16 @@
         <table style="width: 100%">
             <tr>
                 <td style="width: 30px;">
-                    <img src="{{ public_path('img/team-2.jpg') }}" alt="logo" width="100" height="100" style="border-radius: 21px" />
+                    <img src="{{ public_path('img/team-2.jpg') }}" alt="logo" width="100" height="100"
+                        style="border-radius: 21px" />
                 </td>
                 <td>
                     <span class="title" style="margin-left: 0.5rem;">
                         {{ strtoupper($title) }} <br>
                     </span>
                     <span class="title" style="margin-left: 0.5rem;">
-                        PERIODE {{ strtoupper(\Carbon\Carbon::make($bulan)->format("F")) }} TAHUN {{ \Carbon\Carbon::make($bulan)->format("Y") }} <br>
+                        PERIODE {{ strtoupper(\Carbon\Carbon::make($bulan)->format('F')) }} TAHUN
+                        {{ \Carbon\Carbon::make($bulan)->format('Y') }} <br>
                     </span>
                     <span class="title" style="margin-left: 0.5rem;">
                         PT ABCD DEFG <br>
@@ -112,12 +114,12 @@
             </tr>
         </table>
 
-        <table class="presensi-karyawan">
+        <table class="presensi-pemagang">
             <thead>
                 <tr>
                     <th>No.</th>
-                    <th>Nama Karyawan / NIK</th>
-                    <th>Jabatan / Departemen</th>
+                    <th>Nama Pemagang / NIK</th>
+                    <th>Jabatan / Instansi</th>
                     <th>Jumlah Kehadiran</th>
                     <th>Jumlah Terlambat</th>
                 </tr>
@@ -126,13 +128,13 @@
                 @foreach ($riwayatPresensi as $value => $item)
                     <tr>
                         <td>
-                            {{ $value + 1 . "." }}
+                            {{ $value + 1 . '.' }}
                         </td>
                         <td>
-                            {{ $item->nama_karyawan }} - {{ $item->nik }}
+                            {{ $item->nama_pemagang }} - {{ $item->nik }}
                         </td>
                         <td>
-                            {{ $item->jabatan_karyawan }} - {{ $item->nama_departemen }}
+                            {{ $item->jabatan_pemagang }} - {{ $item->nama_instansi }}
                         </td>
                         <td>
                             {{ $item->total_kehadiran }}
@@ -148,7 +150,7 @@
         <table class="pengesahan-atasan">
             <tr class="tempat">
                 <td colspan="2">
-                    Tenetur Nostrum, {{ \Carbon\Carbon::now()->format("d F Y") }}
+                    Tenetur Nostrum, {{ \Carbon\Carbon::now()->format('d F Y') }}
                 </td>
             </tr>
             <tr class="atasan">

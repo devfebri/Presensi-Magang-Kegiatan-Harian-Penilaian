@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Karyawan;
+use App\Models\Pemagang;
 use App\Models\LokasiKantor;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -18,24 +18,33 @@ class DatabaseSeeder extends Seeder
     {
         User::create([
             'name' => 'Admin',
-            'email' => 'admin@gmail.com',
+            'email' => 'admin@admin.com',
             'password' => Hash::make('password'),
         ]);
 
+        // LokasiKantor::create([
+        //     'kota' => 'Blora Florist',
+        //     'alamat' => 'Bakung Jaya',
+        //     'latitude' => -1.639256738208176,
+        //     'longitude' => 103.66542735535934,
+        //     'radius' => 300,
+        //     'is_used' => true,
+        // ]);
         LokasiKantor::create([
-            'kota' => 'Tenetur Nostrum',
-            'alamat' => 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium, vero.',
-            'latitude' => -7.313151173243561,
-            'longitude' => 112.72715491471567,
-            'radius' => 33,
+            'kota' => 'Jambi',
+            'alamat' => 'Universitas Nurdin Hamzah',
+            'latitude' => -1.639256738208176,
+            'longitude' => 103.592547983955,
+            'radius' => 300,
             'is_used' => true,
         ]);
 
         $this->call([
-            DepartemenSeeder::class,
-            KaryawanSeeder::class,
+            InstansiSeeder::class,
+            PemagangSeeder::class,
             PresensiSeeder::class,
             PengajuanPresensiSeeder::class,
+            PembimbingSeeder::class,
         ]);
     }
 }

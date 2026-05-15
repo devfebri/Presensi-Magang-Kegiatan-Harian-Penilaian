@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>{{ $title . ' ' . $karyawan->nama_lengkap . '.pdf' }}</title>
+    <title>{{ $title . ' ' . $pemagang->nama_lengkap . '.pdf' }}</title>
 
     <!-- Normalize or reset CSS with your favorite library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
@@ -29,38 +29,38 @@
             border-collapse: collapse;
         }
 
-        .identitas-karyawan {
+        .identitas-pemagang {
             margin-top: 2rem;
         }
 
-        .identitas-karyawan td {
+        .identitas-pemagang td {
             padding: 0.25rem;
         }
 
-        .presensi-karyawan {
+        .presensi-pemagang {
             width: 100%;
             margin-top: 1.5rem;
         }
 
-        .presensi-karyawan tbody>tr>td {
+        .presensi-pemagang tbody>tr>td {
             text-align: center;
             padding: 0.5rem;
         }
 
-        .presensi-karyawan th {
+        .presensi-pemagang th {
             font-weight: bold;
             background: salmon;
             padding: 0.5rem;
             font-size: 14px;
         }
 
-        .presensi-karyawan>tbody>tr>td {
+        .presensi-pemagang>tbody>tr>td {
             font-size: 12px;
         }
 
-        .presensi-karyawan,
-        .presensi-karyawan>thead>tr>th,
-        .presensi-karyawan>tbody>tr>td {
+        .presensi-pemagang,
+        .presensi-pemagang>thead>tr>th,
+        .presensi-pemagang>tbody>tr>td {
             border: 1px solid black;
             padding: 0.5rem
         }
@@ -112,44 +112,44 @@
             </tr>
         </table>
 
-        <table class="identitas-karyawan">
+        <table class="identitas-pemagang">
             <tr>
                 <td rowspan="7">
-                    @if ($karyawan->foto)
-                        <img src="{{ public_path("storage/unggah/karyawan/$karyawan->foto") }}" alt="foto-karyawan" width="100" height="150" style="border-radius: 0.5rem" />
+                    @if ($pemagang->foto)
+                        <img src="{{ public_path("storage/unggah/pemagang/$pemagang->foto") }}" alt="foto-pemagang" width="100" height="150" style="border-radius: 0.5rem" />
                     @else
-                        <img src="{{ public_path("img/team-2.jpg") }}" alt="foto-karyawan" width="100" height="150" style="border-radius: 0.5rem" />
+                        <img src="{{ public_path("img/team-2.jpg") }}" alt="foto-pemagang" width="100" height="150" style="border-radius: 0.5rem" />
                     @endif
                 </td>
             </tr>
             <tr>
                 <td>NIK</td>
                 <td>:</td>
-                <td>{{ $karyawan->nik }}</td>
+                <td>{{ $pemagang->nik }}</td>
             </tr>
             <tr>
-                <td>Nama Karyawan</td>
+                <td>Nama Pemagang</td>
                 <td>:</td>
-                <td>{{ $karyawan->nama_lengkap }}</td>
+                <td>{{ $pemagang->nama_lengkap }}</td>
             </tr>
             <tr>
                 <td>Jabatan</td>
                 <td>:</td>
-                <td>{{ $karyawan->jabatan }}</td>
+                <td>{{ $pemagang->jabatan }}</td>
             </tr>
             <tr>
                 <td>Departemen</td>
                 <td>:</td>
-                <td>{{ $karyawan->departemen->nama }}</td>
+                <td>{{ $pemagang->departemen->nama }}</td>
             </tr>
             <tr>
                 <td>Email / Telepon</td>
                 <td>:</td>
-                <td>{{ $karyawan->email }} / {{ $karyawan->telepon }}</td>
+                <td>{{ $pemagang->email }} / {{ $pemagang->telepon }}</td>
             </tr>
         </table>
 
-        <table class="presensi-karyawan">
+        <table class="presensi-pemagang">
             <thead>
                 <tr>
                     <th>No.</th>

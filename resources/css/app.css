@@ -1,3 +1,145 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Government Theme Styles */
+@layer components {
+    /* Cards */
+    .gov-card {
+        @apply bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200;
+    }
+
+    .gov-card-header {
+        @apply bg-gradient-to-r from-gov-primary to-blue-900 text-white px-6 py-4 rounded-t-xl;
+    }
+
+    .gov-card-body {
+        @apply p-6;
+    }
+
+    /* Badges */
+    .gov-badge-primary {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-gov-primary;
+    }
+
+    .gov-badge-success {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700;
+    }
+
+    .gov-badge-warning {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700;
+    }
+
+    .gov-badge-danger {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700;
+    }
+
+    /* Buttons Enhanced */
+    .gov-btn-primary {
+        @apply inline-flex items-center px-4 py-2 bg-gov-primary text-white font-semibold rounded-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-gov-primary focus:ring-offset-2 transition-all duration-200 shadow-md hover:shadow-lg;
+    }
+
+    .gov-btn-secondary {
+        @apply inline-flex items-center px-4 py-2 bg-white border-2 border-gov-primary text-gov-primary font-semibold rounded-lg hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-gov-primary focus:ring-offset-2 transition-all duration-200;
+    }
+
+    .gov-btn-danger {
+        @apply inline-flex items-center px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200 shadow-md hover:shadow-lg;
+    }
+
+    /* Tables */
+    .gov-table {
+        @apply w-full border-collapse;
+    }
+
+    .gov-table thead {
+        @apply bg-gradient-to-r from-gov-primary to-blue-900 text-white;
+    }
+
+    .gov-table thead th {
+        @apply px-4 py-3 text-left font-semibold;
+    }
+
+    .gov-table tbody tr {
+        @apply border-b border-gray-200 hover:bg-gray-50 transition-colors;
+    }
+
+    .gov-table tbody td {
+        @apply px-4 py-3;
+    }
+
+    /* Forms */
+    .gov-form-input {
+        @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-gov-primary focus:ring-2 focus:ring-gov-primary focus:ring-opacity-10 transition-all;
+    }
+
+    .gov-form-label {
+        @apply block text-sm font-semibold text-gray-700 mb-2;
+    }
+
+    /* Alerts */
+    .gov-alert-info {
+        @apply bg-blue-50 border-l-4 border-gov-primary p-4 rounded-lg;
+    }
+
+    .gov-alert-success {
+        @apply bg-green-50 border-l-4 border-green-500 p-4 rounded-lg;
+    }
+
+    .gov-alert-warning {
+        @apply bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-lg;
+    }
+
+    .gov-alert-danger {
+        @apply bg-red-50 border-l-4 border-red-600 p-4 rounded-lg;
+    }
+}
+
+/* Animations */
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.animate-slide-in-left {
+    animation: slideInLeft 0.3s ease-out;
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #003da5;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0d47a1;
+}

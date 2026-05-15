@@ -1,577 +1,310 @@
 @extends("dashboard.layouts.main")
 
 @section("container")
-    <div>
-        <!-- row 1 -->
-        <div class="-mx-3 flex flex-wrap lg:gap-y-3">
-            <!-- Jam Masuk Kerja -->
-            <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
-                    <div class="flex-auto p-4">
-                        <div class="-mx-3 flex flex-row">
-                            <div class="w-2/3 max-w-full flex-none px-3">
-                                <div>
-                                    <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">Jam Masuk Kerja</p>
-                                    <h5 class="mb-2 font-bold dark:text-white">08:00 WIB</h5>
-                                </div>
-                            </div>
-                            <div class="basis-1/3 px-3 text-right">
-                                <div class="rounded-circle inline-block h-12 w-12 bg-gradient-to-tl from-blue-500 to-violet-500 text-center">
-                                    <i class="ri-time-line relative top-3 text-2xl leading-none text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="space-y-6">
 
-            <!-- Jam Pulang Kerja -->
-            <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
-                    <div class="flex-auto p-4">
-                        <div class="-mx-3 flex flex-row">
-                            <div class="w-2/3 max-w-full flex-none px-3">
-                                <div>
-                                    <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">Jam Pulang Kerja</p>
-                                    <h5 class="mb-2 font-bold dark:text-white">16:00 WIB</h5>
-                                </div>
-                            </div>
-                            <div class="basis-1/3 px-3 text-right">
-                                <div class="rounded-circle inline-block h-12 w-12 bg-gradient-to-tl from-red-600 to-orange-600 text-center">
-                                    <i class="ri-time-line relative top-3 text-2xl leading-none text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    {{-- ===== WELCOME HEADER ===== --}}
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
+                    {{ now()->translatedFormat('l, d F Y') }}
+                </p>
+                <h1 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">
+                    Selamat datang, <span class="text-sky-600 dark:text-sky-400">{{ Auth::guard('pemagang')->user()->nama_lengkap }}</span> 👋
+                </h1>
+                <p class="text-sm text-slate-500 mt-1">Berikut ringkasan aktivitas presensi Anda hari ini.</p>
             </div>
-
-            <!-- Masuk Kerja Hari Ini -->
-            <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
-                    <div class="flex-auto p-4">
-                        <div class="-mx-3 flex flex-row">
-                            <div class="w-2/3 max-w-full flex-none px-3">
-                                <div>
-                                    <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">Masuk Kerja Hari Ini</p>
-                                    <h5 class="mb-2 font-bold dark:text-white">{{ $presensiHariIni != null ? date("H:i:s", strtotime($presensiHariIni->jam_masuk)) . " WIB" : "Belum Presensi" }}</h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        @if ($presensiHariIni != null)
-                                            @if (date("H:i:s", strtotime($presensiHariIni->jam_masuk)) < date_create("08:00:00")->format("H:i:s"))
-                                                <span class="text-sm font-bold leading-normal text-emerald-500 dark:text-emerald-300">Anda Datang Lebih Awal</span>
-                                            @elseif (date("H:i:s", strtotime($presensiHariIni->jam_masuk)) > date_create("08:00:00")->format("H:i:s"))
-                                                <span class="text-sm font-bold leading-normal text-red-600 dark:text-red-300">Anda Datang Terlambat</span>
-                                            @endif
-                                        @endif
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="basis-1/3 px-3 text-right">
-                                <div class="rounded-circle inline-block h-12 w-12 bg-gradient-to-tl from-emerald-500 to-teal-400 text-center">
-                                    <i class="ri-login-circle-line relative top-3 text-2xl leading-none text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pulang Kerja Hari Ini -->
-            <div class="w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:w-1/4">
-                <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
-                    <div class="flex-auto p-4">
-                        <div class="-mx-3 flex flex-row">
-                            <div class="w-2/3 max-w-full flex-none px-3">
-                                <div>
-                                    <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">Pulang Kerja Hari Ini</p>
-                                    <h5 class="mb-2 font-bold dark:text-white">{{ $presensiHariIni != null && $presensiHariIni->jam_keluar != null ? date("H:i:s", strtotime($presensiHariIni->jam_keluar)) . " WIB" : "Belum Presensi" }}</h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        @if ($presensiHariIni != null && $presensiHariIni->jam_keluar != null)
-                                            @if (date("H:i:s", strtotime($presensiHariIni->jam_keluar)) < date_create("16:00:00")->format("H:i:s"))
-                                                <span class="text-sm font-bold leading-normal text-red-600 dark:text-red-300">Anda Pulang Lebih Awal</span>
-                                            @elseif (date("H:i:s", strtotime($presensiHariIni->jam_keluar)) > date_create("16:00:00")->format("H:i:s"))
-                                                <span class="text-sm font-bold leading-normal text-emerald-500 dark:text-emerald-300">Anda Pulang Lebih Lama</span>
-                                            @endif
-                                        @endif
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="basis-1/3 px-3 text-right">
-                                <div class="rounded-circle inline-block h-12 w-12 bg-gradient-to-tl from-orange-500 to-yellow-500 text-center">
-                                    <i class="ri-logout-circle-line relative top-3 text-2xl leading-none text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <a href="{{ route('pemagang.presensi') }}"
+                class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white text-sm font-semibold rounded-xl shadow-md shadow-sky-500/20 transition-all hover:-translate-y-0.5 whitespace-nowrap">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Presensi Sekarang
+            </a>
         </div>
-
-        <!-- row 2 -->
-        <div class="-mx-3 mt-6 flex flex-wrap">
-            <div class="mb-6 mt-0 w-full max-w-full px-3">
-                <div class="dark:bg-slate-850 dark:shadow-dark-xl border-black-125 relative flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border shadow-xl">
-                    <div class="rounded-t-4 mb-0 p-4 pb-0">
-                        <div class="flex justify-between">
-                            <h6 class="mb-2 dark:text-white">Riwayat Presensi Bulan <span class="font-bold">{{ date("F") }}</span></h6>
-                        </div>
-                    </div>
-
-                    <div class="mb-5 flex flex-wrap">
-                        <!-- Rekap Hadir -->
-                        <div class="mb-3 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                            <div class="dark:bg-slate-900 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
-                                <div class="flex-auto p-4">
-                                    <div class="-mx-3 flex flex-row">
-                                        <div class="w-2/3 max-w-full flex-none px-3">
-                                            <div>
-                                                <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">Hadir</p>
-                                                <h5 class="mb-2 font-bold dark:text-white">{{ $rekapPresensi->jml_kehadiran }}</h5>
-                                                {{-- <p class="mb-0 dark:text-white dark:opacity-60">
-                                                    @if ($presensiHariIni != null)
-                                                        @if (date("H:i:s", strtotime($presensiHariIni->jam_masuk)) < date_create("08:00:00")->format("H:i:s"))
-                                                            <span class="text-sm font-bold leading-normal text-emerald-500">Anda Datang Lebih Awal</span>
-                                                        @elseif (date("H:i:s", strtotime($presensiHariIni->jam_masuk)) > date_create("08:00:00")->format("H:i:s"))
-                                                            <span class="text-sm font-bold leading-normal text-red-600">Anda Datang Terlambat</span>
-                                                        @endif
-                                                    @endif
-                                                </p> --}}
-                                            </div>
-                                        </div>
-                                        <div class="basis-1/3 px-3 text-right">
-                                            <div class="rounded-circle inline-block h-12 w-12 bg-gradient-to-tl from-blue-500 to-blue-400 text-center">
-                                                <i class="ri-body-scan-line relative top-3 text-2xl leading-none text-white"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Rekap Izin -->
-                        <div class="mb-3 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                            <div class="dark:bg-slate-900 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
-                                <div class="flex-auto p-4">
-                                    <div class="-mx-3 flex flex-row">
-                                        <div class="w-2/3 max-w-full flex-none px-3">
-                                            <div>
-                                                <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">Sakit</p>
-                                                <h5 class="mb-2 font-bold dark:text-white">{{ $rekapPengajuanPresensi->jml_sakit }}</h5>
-                                            </div>
-                                        </div>
-                                        <div class="basis-1/3 px-3 text-right">
-                                            <div class="rounded-circle inline-block h-12 w-12 bg-gradient-to-tl from-emerald-500 to-teal-400 text-center">
-                                                <i class="ri-hospital-line relative top-3 text-2xl leading-none text-white"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Rekap Sakit -->
-                        <div class="mb-3 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                            <div class="dark:bg-slate-900 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
-                                <div class="flex-auto p-4">
-                                    <div class="-mx-3 flex flex-row">
-                                        <div class="w-2/3 max-w-full flex-none px-3">
-                                            <div>
-                                                <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">Izin</p>
-                                                <h5 class="mb-2 font-bold dark:text-white">{{ $rekapPengajuanPresensi->jml_izin }}</h5>
-                                            </div>
-                                        </div>
-                                        <div class="basis-1/3 px-3 text-right">
-                                            <div class="rounded-circle inline-block h-12 w-12 bg-gradient-to-tl from-yellow-500 to-amber-400 text-center">
-                                                <i class="ri-file-list-3-line relative top-3 text-2xl leading-none text-white"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Rekap Telat -->
-                        <div class="mb-3 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                            <div class="dark:bg-slate-900 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
-                                <div class="flex-auto p-4">
-                                    <div class="-mx-3 flex flex-row">
-                                        <div class="w-2/3 max-w-full flex-none px-3">
-                                            <div>
-                                                <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">Terlambat</p>
-                                                <h5 class="mb-2 font-bold dark:text-white">{{ $rekapPresensi->jml_terlambat ? $rekapPresensi->jml_terlambat : 0 }}</h5>
-                                            </div>
-                                        </div>
-                                        <div class="basis-1/3 px-3 text-right">
-                                            <div class="rounded-circle inline-block h-12 w-12 bg-gradient-to-tl from-red-600 to-orange-500 text-center">
-                                                <i class="ri-timer-2-line relative top-3 text-2xl leading-none text-white"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-6 flex flex-wrap gap-y-10">
-                        {{-- Tabel Rekap Presensi --}}
-                        <div class="w-full overflow-x-auto lg:w-1/2 lg:flex-none">
-                            <h1 class="ml-3 text-lg font-semibold dark:text-white">Rekap Presensi</h1>
-                            <table class="table mb-4 w-full border-collapse items-center border-gray-200 align-top dark:border-white/40">
-                                <thead class="text-sm text-gray-800 dark:text-gray-300">
-                                    <tr>
-                                        <th></th>
-                                        <th>Hari</th>
-                                        <th>Tanggal</th>
-                                        <th>Jam Masuk</th>
-                                        <th>Jam Keluar</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($riwayatPresensi as $value => $item)
-                                        <tr class="hover">
-                                            <td class="font-bold">{{ $riwayatPresensi->firstItem() + $value }}</td>
-                                            <td class="text-slate-500 dark:text-slate-300">{{ date("l", strtotime($item->tanggal_presensi)) }}</td>
-                                            <td class="text-slate-500 dark:text-slate-300">{{ date("d-m-Y", strtotime($item->tanggal_presensi)) }}</td>
-                                            <td class="{{ $item->jam_masuk < "08:00" ? "text-success" : "text-error" }}">{{ date("H:i:s", strtotime($item->jam_masuk)) }}</td>
-                                            @if ($item != null && $item->jam_keluar != null)
-                                                <td class="{{ $item->jam_keluar > "16:00" ? "text-success" : "text-error" }}">{{ date("H:i:s", strtotime($item->jam_keluar)) }}</td>
-                                            @else
-                                                <td>Belum Presensi</td>
-                                            @endif
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <div class="mx-3 mb-3">
-                                {{ $riwayatPresensi->links() }}
-                            </div>
-                        </div>
-
-                        {{-- Tabel Leaderboard Hari ini --}}
-                        <div class="w-full overflow-x-auto lg:w-1/2 lg:flex-none">
-                            <h1 class="ml-3 text-lg font-semibold dark:text-white">
-                                Leaderboard
-                                <span class="font-bold text-blue-700 dark:text-blue-500">{{ date("d-m-Y") }}</span>
-                            </h1>
-                            <table class="table mb-4 w-full border-collapse items-center border-gray-200 align-top dark:border-white/40">
-                                <thead class="text-sm text-gray-800 dark:text-gray-300">
-                                    <tr>
-                                        <th></th>
-                                        <th>Nama</th>
-                                        <th>Jam Masuk</th>
-                                        <th>Jam Keluar</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($leaderboard as $value => $item)
-                                        <tr class="hover">
-                                            <td class="font-bold">{{ $leaderboard->firstItem() + $value }}</td>
-                                            <td class="w-3/10 whitespace-nowrap p-2">
-                                                <div class="flex items-center px-2 py-1">
-                                                    <div>
-                                                        <h1 class="mb-0 font-bold leading-normal text-slate-500 dark:text-slate-300">{{ $item->nama_lengkap }}</h1>
-                                                        <p class="mb-0 text-xs leading-tight text-slate-500 dark:text-slate-300">{{ $item->jabatan }}</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="{{ $item->jam_masuk < "08:00" ? "text-success" : "text-error" }}">{{ date("H:i:s", strtotime($item->jam_masuk)) }}</td>
-                                            @if ($item != null && $item->jam_keluar != null)
-                                                <td class="{{ $item->jam_keluar > "16:00" ? "text-success" : "text-error" }}">{{ date("H:i:s", strtotime($item->jam_keluar)) }}</td>
-                                            @else
-                                                <td>Belum Presensi</td>
-                                            @endif
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <div class="mx-3 mb-3">
-                                {{ $leaderboard->links() }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- row 2 -->
-        {{-- <div class="-mx-3 mt-6 flex flex-wrap">
-            <div class="mt-0 w-full max-w-full px-3 lg:w-7/12 lg:flex-none">
-                <div class="border-black/12.5 dark:bg-slate-850 dark:shadow-dark-xl relative z-20 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border shadow-xl">
-                    <div class="border-black/12.5 mb-0 rounded-t-2xl border-b-0 border-solid p-6 pb-0 pt-4">
-                        <h6 class="capitalize dark:text-white">Sales overview</h6>
-                        <p class="mb-0 text-sm leading-normal dark:text-white dark:opacity-60">
-                            <i class="ri-arrow-up-line text-emerald-500"></i>
-                            <span class="font-semibold">4% more</span> in 2021
-                        </p>
-                    </div>
-                    <div class="flex-auto p-4">
-                        <div>
-                            <canvas id="chart-line" height="300"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="w-full max-w-full px-3 lg:w-5/12 lg:flex-none">
-                <div slider class="relative h-full w-full overflow-hidden rounded-2xl">
-                    <!-- slide 1 -->
-                    <div slide class="absolute h-full w-full transition-all duration-500">
-                        <img class="h-full object-cover" src="{{ asset("img/carousel-1.jpg") }}" alt="carousel image" />
-                        <div class="absolute bottom-0 left-0 right-[15%] ml-12 block pb-5 pt-5 text-start text-white">
-                            <div class="mb-4 inline-block h-8 w-8 rounded-lg bg-white bg-center fill-current stroke-none text-center text-black">
-                                <i class="top-0.75 ri-camera-3-fill relative text-base text-slate-700"></i>
-                            </div>
-                            <h5 class="mb-1 text-white">Get started with Argon</h5>
-                            <p class="dark:opacity-80">There’s nothing I really wanted to do in life that I wasn’t able to get good at.</p>
-                        </div>
-                    </div>
-
-                    <!-- slide 2 -->
-                    <div slide class="absolute h-full w-full transition-all duration-500">
-                        <img class="h-full object-cover" src="{{ asset("img/carousel-2.jpg") }}" alt="carousel image" />
-                        <div class="absolute bottom-0 left-0 right-[15%] ml-12 block pb-5 pt-5 text-start text-white">
-                            <div class="mb-4 inline-block h-8 w-8 rounded-lg bg-white bg-center fill-current stroke-none text-center text-black">
-                                <i class="top-0.75 ri-lightbulb-fill relative text-base text-slate-700"></i>
-                            </div>
-                            <h5 class="mb-1 text-white">Faster way to create web pages</h5>
-                            <p class="dark:opacity-80">That’s my skill. I’m not really specifically talented at anything except for the ability to learn.</p>
-                        </div>
-                    </div>
-
-                    <!-- slide 3 -->
-                    <div slide class="absolute h-full w-full transition-all duration-500">
-                        <img class="h-full object-cover" src="{{ asset("img/carousel-3.jpg") }}" alt="carousel image" />
-                        <div class="absolute bottom-0 left-0 right-[15%] ml-12 block pb-5 pt-5 text-start text-white">
-                            <div class="mb-4 inline-block h-8 w-8 rounded-lg bg-white bg-center fill-current stroke-none text-center text-black">
-                                <i class="top-0.75 ri-trophy-fill relative text-base text-slate-700"></i>
-                            </div>
-                            <h5 class="mb-1 text-white">Share with us your design tips!</h5>
-                            <p class="dark:opacity-80">Don’t be afraid to be wrong because you can’t learn anything from a compliment.</p>
-                        </div>
-                    </div>
-
-                    <!-- Control buttons -->
-                    <button btn-next class="ri-arrow-right-s-fill absolute right-4 top-6 z-10 h-10 w-10 cursor-pointer border-none p-2 text-lg text-white opacity-50 hover:opacity-100 active:scale-110"></button>
-                    <button btn-prev class="ri-arrow-left-s-fill absolute right-16 top-6 z-10 h-10 w-10 cursor-pointer border-none p-2 text-lg text-white opacity-50 hover:opacity-100 active:scale-110"></button>
-                </div>
-            </div>
-        </div> --}}
-
-        <!-- row 3 -->
-        {{-- <div class="-mx-3 mt-6 flex flex-wrap">
-            <div class="mb-6 mt-0 w-full max-w-full px-3 lg:mb-0 lg:w-7/12 lg:flex-none">
-                <div class="dark:bg-slate-850 dark:shadow-dark-xl border-black-125 relative flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border shadow-xl dark:bg-gray-950">
-                    <div class="rounded-t-4 mb-0 p-4 pb-0">
-                        <div class="flex justify-between">
-                            <h6 class="mb-2 dark:text-white">Sales by Country</h6>
-                        </div>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="mb-4 w-full border-collapse items-center border-gray-200 align-top dark:border-white/40">
-                            <tbody>
-                                <tr>
-                                    <td class="w-3/10 whitespace-nowrap border-b bg-transparent p-2 align-middle dark:border-white/40">
-                                        <div class="flex items-center px-2 py-1">
-                                            <div>
-                                                <img src="{{ asset("img/icons/flags/US.png") }}" alt="Country flag" />
-                                            </div>
-                                            <div class="ml-6">
-                                                <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Country:
-                                                </p>
-                                                <h6 class="mb-0 text-sm leading-normal dark:text-white">United States</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="whitespace-nowrap border-b bg-transparent p-2 align-middle dark:border-white/40">
-                                        <div class="text-center">
-                                            <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Sales:</p>
-                                            <h6 class="mb-0 text-sm leading-normal dark:text-white">2500</h6>
-                                        </div>
-                                    </td>
-                                    <td class="whitespace-nowrap border-b bg-transparent p-2 align-middle dark:border-white/40">
-                                        <div class="text-center">
-                                            <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Value:</p>
-                                            <h6 class="mb-0 text-sm leading-normal dark:text-white">$230,900</h6>
-                                        </div>
-                                    </td>
-                                    <td class="whitespace-nowrap border-b bg-transparent p-2 align-middle text-sm leading-normal dark:border-white/40">
-                                        <div class="flex-1 text-center">
-                                            <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Bounce:</p>
-                                            <h6 class="mb-0 text-sm leading-normal dark:text-white">29.9%</h6>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="w-3/10 whitespace-nowrap border-b bg-transparent p-2 align-middle dark:border-white/40">
-                                        <div class="flex items-center px-2 py-1">
-                                            <div>
-                                                <img src="{{ asset("img/icons/flags/DE.png") }}" alt="Country flag" />
-                                            </div>
-                                            <div class="ml-6">
-                                                <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Country:
-                                                </p>
-                                                <h6 class="mb-0 text-sm leading-normal dark:text-white">Germany</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="whitespace-nowrap border-b bg-transparent p-2 align-middle dark:border-white/40">
-                                        <div class="text-center">
-                                            <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Sales:</p>
-                                            <h6 class="mb-0 text-sm leading-normal dark:text-white">3.900</h6>
-                                        </div>
-                                    </td>
-                                    <td class="whitespace-nowrap border-b bg-transparent p-2 align-middle dark:border-white/40">
-                                        <div class="text-center">
-                                            <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Value:</p>
-                                            <h6 class="mb-0 text-sm leading-normal dark:text-white">$440,000</h6>
-                                        </div>
-                                    </td>
-                                    <td class="whitespace-nowrap border-b bg-transparent p-2 align-middle text-sm leading-normal dark:border-white/40">
-                                        <div class="flex-1 text-center">
-                                            <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Bounce:</p>
-                                            <h6 class="mb-0 text-sm leading-normal dark:text-white">40.22%</h6>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="w-3/10 whitespace-nowrap border-b bg-transparent p-2 align-middle dark:border-white/40">
-                                        <div class="flex items-center px-2 py-1">
-                                            <div>
-                                                <img src="{{ asset("img/icons/flags/GB.png") }}" alt="Country flag" />
-                                            </div>
-                                            <div class="ml-6">
-                                                <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Country:
-                                                </p>
-                                                <h6 class="mb-0 text-sm leading-normal dark:text-white">Great Britain</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="whitespace-nowrap border-b bg-transparent p-2 align-middle dark:border-white/40">
-                                        <div class="text-center">
-                                            <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Sales:</p>
-                                            <h6 class="mb-0 text-sm leading-normal dark:text-white">1.400</h6>
-                                        </div>
-                                    </td>
-                                    <td class="whitespace-nowrap border-b bg-transparent p-2 align-middle dark:border-white/40">
-                                        <div class="text-center">
-                                            <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Value:</p>
-                                            <h6 class="mb-0 text-sm leading-normal dark:text-white">$190,700</h6>
-                                        </div>
-                                    </td>
-                                    <td class="whitespace-nowrap border-b bg-transparent p-2 align-middle text-sm leading-normal dark:border-white/40">
-                                        <div class="flex-1 text-center">
-                                            <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Bounce:</p>
-                                            <h6 class="mb-0 text-sm leading-normal dark:text-white">23.44%</h6>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="w-3/10 whitespace-nowrap border-0 bg-transparent p-2 align-middle">
-                                        <div class="flex items-center px-2 py-1">
-                                            <div>
-                                                <img src="{{ asset("img/icons/flags/BR.png") }}" alt="Country flag" />
-                                            </div>
-                                            <div class="ml-6">
-                                                <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Country:
-                                                </p>
-                                                <h6 class="mb-0 text-sm leading-normal dark:text-white">Brasil</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="whitespace-nowrap border-0 bg-transparent p-2 align-middle">
-                                        <div class="text-center">
-                                            <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Sales:</p>
-                                            <h6 class="mb-0 text-sm leading-normal dark:text-white">562</h6>
-                                        </div>
-                                    </td>
-                                    <td class="whitespace-nowrap border-0 bg-transparent p-2 align-middle">
-                                        <div class="text-center">
-                                            <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Value:</p>
-                                            <h6 class="mb-0 text-sm leading-normal dark:text-white">$143,960</h6>
-                                        </div>
-                                    </td>
-                                    <td class="whitespace-nowrap border-0 bg-transparent p-2 align-middle text-sm leading-normal">
-                                        <div class="flex-1 text-center">
-                                            <p class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-60">Bounce:</p>
-                                            <h6 class="mb-0 text-sm leading-normal dark:text-white">32.14%</h6>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-0 w-full max-w-full px-3 lg:w-5/12 lg:flex-none">
-                <div class="border-black/12.5 dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border shadow-xl">
-                    <div class="rounded-t-4 p-4 pb-0">
-                        <h6 class="mb-0 dark:text-white">Categories</h6>
-                    </div>
-                    <div class="flex-auto p-4">
-                        <ul class="mb-0 flex flex-col rounded-lg pl-0">
-                            <li class="relative mb-2 flex justify-between rounded-xl rounded-t-lg border-0 py-2 pr-4 text-inherit">
-                                <div class="flex items-center">
-                                    <div class="dark:from-slate-750 dark:to-gray-850 mr-4 inline-block h-8 w-8 rounded-xl bg-gradient-to-tl from-zinc-800 to-zinc-700 bg-center fill-current stroke-none text-center text-black shadow-sm dark:bg-gradient-to-tl">
-                                        <i class="ri-smartphone-line top-0.75 text-xs relative text-white"></i>
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <h6 class="mb-1 text-sm leading-normal text-slate-700 dark:text-white">Devices</h6>
-                                        <span class="text-xs leading-tight dark:text-white/80">250 in stock, <span class="font-semibold">346+ sold</span></span>
-                                    </div>
-                                </div>
-                                <div class="flex">
-                                    <button class="leading-pro rounded-3.5xl p-1.2 h-6.5 w-6.5 group mx-0 my-auto inline-block cursor-pointer border-0 bg-transparent text-center align-middle text-xs font-bold text-slate-700 shadow-none transition-all ease-in dark:text-white"><i class="ri-arrow-right-line ease-bounce text-2xs group-hover:translate-x-1.25 ni-bold-right transition-all duration-200" aria-hidden="true"></i></button>
-                                </div>
-                            </li>
-                            <li class="relative mb-2 flex justify-between rounded-xl border-0 py-2 pr-4 text-inherit">
-                                <div class="flex items-center">
-                                    <div class="dark:from-slate-750 dark:to-gray-850 mr-4 inline-block h-8 w-8 rounded-xl bg-gradient-to-tl from-zinc-800 to-zinc-700 bg-center fill-current stroke-none text-center text-black shadow-sm dark:bg-gradient-to-tl">
-                                        <i class="ri-price-tag-3-fill top-0.75 text-xs relative text-white"></i>
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <h6 class="mb-1 text-sm leading-normal text-slate-700 dark:text-white">Tickets</h6>
-                                        <span class="text-xs leading-tight dark:text-white/80">123 closed, <span class="font-semibold">15 open</span></span>
-                                    </div>
-                                </div>
-                                <div class="flex">
-                                    <button class="leading-pro rounded-3.5xl p-1.2 h-6.5 w-6.5 group mx-0 my-auto inline-block cursor-pointer border-0 bg-transparent text-center align-middle text-xs font-bold text-slate-700 shadow-none transition-all ease-in dark:text-white"><i class="ri-arrow-right-line ease-bounce text-2xs group-hover:translate-x-1.25 ni-bold-right transition-all duration-200" aria-hidden="true"></i></button>
-                                </div>
-                            </li>
-                            <li class="relative mb-2 flex justify-between rounded-xl rounded-b-lg border-0 py-2 pr-4 text-inherit">
-                                <div class="flex items-center">
-                                    <div class="dark:from-slate-750 dark:to-gray-850 mr-4 inline-block h-8 w-8 rounded-xl bg-gradient-to-tl from-zinc-800 to-zinc-700 bg-center fill-current stroke-none text-center text-black shadow-sm dark:bg-gradient-to-tl">
-                                        <i class="ri-box-2-line top-0.75 text-xs relative text-white"></i>
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <h6 class="mb-1 text-sm leading-normal text-slate-700 dark:text-white">Error logs</h6>
-                                        <span class="text-xs leading-tight dark:text-white/80">1 is active, <span class="font-semibold">40
-                                                closed</span></span>
-                                    </div>
-                                </div>
-                                <div class="flex">
-                                    <button class="leading-pro rounded-3.5xl p-1.2 h-6.5 w-6.5 group mx-0 my-auto inline-block cursor-pointer border-0 bg-transparent text-center align-middle text-xs font-bold text-slate-700 shadow-none transition-all ease-in dark:text-white"><i class="ri-arrow-right-line ease-bounce text-2xs group-hover:translate-x-1.25 ni-bold-right transition-all duration-200" aria-hidden="true"></i></button>
-                                </div>
-                            </li>
-                            <li class="relative flex justify-between rounded-xl rounded-b-lg border-0 py-2 pr-4 text-inherit">
-                                <div class="flex items-center">
-                                    <div class="dark:from-slate-750 dark:to-gray-850 mr-4 inline-block h-8 w-8 rounded-xl bg-gradient-to-tl from-zinc-800 to-zinc-700 bg-center fill-current stroke-none text-center text-black shadow-sm dark:bg-gradient-to-tl">
-                                        <i class="ri-user-smile-fill top-0.75 text-xs relative text-white"></i>
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <h6 class="mb-1 text-sm leading-normal text-slate-700 dark:text-white">Happy users</h6>
-                                        <span class="text-xs leading-tight dark:text-white/80"><span class="font-semibold">+ 430
-                                            </span></span>
-                                    </div>
-                                </div>
-                                <div class="flex">
-                                    <button class="leading-pro rounded-3.5xl p-1.2 h-6.5 w-6.5 group mx-0 my-auto inline-block cursor-pointer border-0 bg-transparent text-center align-middle text-xs font-bold text-slate-700 shadow-none transition-all ease-in dark:text-white"><i class="ri-arrow-right-line ease-bounce text-2xs group-hover:translate-x-1.25 ni-bold-right transition-all duration-200" aria-hidden="true"></i></button>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
     </div>
+
+    {{-- ===== ROW 1: JAM KERJA + PRESENSI HARI INI ===== --}}
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+
+        {{-- Jam Masuk Kerja --}}
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-900/40 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-sky-600 dark:text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                    </svg>
+                </div>
+                <span class="text-xs font-semibold text-sky-600 bg-sky-50 dark:bg-sky-900/30 dark:text-sky-400 px-2 py-1 rounded-lg">Masuk</span>
+            </div>
+            <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">Jam Masuk Kerja</p>
+            <p class="text-xl font-bold text-slate-900 dark:text-white">08:00 <span class="text-sm font-medium text-slate-400">WIB</span></p>
+        </div>
+
+        {{-- Jam Pulang Kerja --}}
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/40 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                </div>
+                <span class="text-xs font-semibold text-orange-600 bg-orange-50 dark:bg-orange-900/30 dark:text-orange-400 px-2 py-1 rounded-lg">Pulang</span>
+            </div>
+            <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">Jam Pulang Kerja</p>
+            <p class="text-xl font-bold text-slate-900 dark:text-white">16:00 <span class="text-sm font-medium text-slate-400">WIB</span></p>
+        </div>
+
+        {{-- Masuk Kerja Hari Ini --}}
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                @if($presensiHariIni != null)
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                @endif
+            </div>
+            <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">Masuk Hari Ini</p>
+            <p class="text-xl font-bold text-slate-900 dark:text-white">
+                {{ $presensiHariIni != null ? date('H:i', strtotime($presensiHariIni->jam_masuk)) : '--:--' }}
+                @if($presensiHariIni != null)<span class="text-sm font-medium text-slate-400">WIB</span>@endif
+            </p>
+            @if($presensiHariIni != null)
+                @if(date('H:i:s', strtotime($presensiHariIni->jam_masuk)) < date_create('08:00:00')->format('H:i:s'))
+                    <p class="text-xs font-semibold text-emerald-500 mt-1">✓ Tepat Waktu</p>
+                @else
+                    <p class="text-xs font-semibold text-red-500 mt-1">⚠ Terlambat</p>
+                @endif
+            @else
+                <p class="text-xs text-slate-400 mt-1">Belum presensi</p>
+            @endif
+        </div>
+
+        {{-- Pulang Kerja Hari Ini --}}
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">Pulang Hari Ini</p>
+            <p class="text-xl font-bold text-slate-900 dark:text-white">
+                {{ ($presensiHariIni != null && $presensiHariIni->jam_keluar != null) ? date('H:i', strtotime($presensiHariIni->jam_keluar)) : '--:--' }}
+                @if($presensiHariIni != null && $presensiHariIni->jam_keluar != null)<span class="text-sm font-medium text-slate-400">WIB</span>@endif
+            </p>
+            @if($presensiHariIni != null && $presensiHariIni->jam_keluar != null)
+                @if(date('H:i:s', strtotime($presensiHariIni->jam_keluar)) >= date_create('16:00:00')->format('H:i:s'))
+                    <p class="text-xs font-semibold text-emerald-500 mt-1">✓ Sesuai Jadwal</p>
+                @else
+                    <p class="text-xs font-semibold text-amber-500 mt-1">⚠ Pulang Lebih Awal</p>
+                @endif
+            @else
+                <p class="text-xs text-slate-400 mt-1">Belum presensi pulang</p>
+            @endif
+        </div>
+    </div>
+
+    {{-- ===== ROW 2: REKAP BULAN INI ===== --}}
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+        <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-slate-100 dark:border-slate-700">
+            <div>
+                <h2 class="text-base font-bold text-slate-900 dark:text-white">Rekap Bulan <span class="text-sky-600">{{ date('F Y') }}</span></h2>
+                <p class="text-xs text-slate-400 mt-0.5">Ringkasan kehadiran Anda bulan ini</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 p-6">
+            {{-- Hadir --}}
+            <div class="flex items-center gap-4 p-4 bg-sky-50 dark:bg-sky-900/20 rounded-xl border border-sky-100 dark:border-sky-800/30">
+                <div class="w-12 h-12 rounded-xl bg-sky-500 flex items-center justify-center flex-shrink-0 shadow-md shadow-sky-500/30">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-2xl font-bold text-sky-700 dark:text-sky-300">{{ $rekapPresensi->jml_kehadiran }}</p>
+                    <p class="text-xs font-semibold text-sky-600 dark:text-sky-400 uppercase tracking-wide">Hadir</p>
+                </div>
+            </div>
+
+            {{-- Sakit --}}
+            <div class="flex items-center gap-4 p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-100 dark:border-emerald-800/30">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center flex-shrink-0 shadow-md shadow-emerald-500/30">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-2xl font-bold text-emerald-700 dark:text-emerald-300">{{ $rekapPengajuanPresensi->jml_sakit }}</p>
+                    <p class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">Sakit</p>
+                </div>
+            </div>
+
+            {{-- Izin --}}
+            <div class="flex items-center gap-4 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-100 dark:border-amber-800/30">
+                <div class="w-12 h-12 rounded-xl bg-amber-500 flex items-center justify-center flex-shrink-0 shadow-md shadow-amber-500/30">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-2xl font-bold text-amber-700 dark:text-amber-300">{{ $rekapPengajuanPresensi->jml_izin }}</p>
+                    <p class="text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wide">Izin</p>
+                </div>
+            </div>
+
+            {{-- Terlambat --}}
+            <div class="flex items-center gap-4 p-4 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-800/30">
+                <div class="w-12 h-12 rounded-xl bg-red-500 flex items-center justify-center flex-shrink-0 shadow-md shadow-red-500/30">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-2xl font-bold text-red-700 dark:text-red-300">{{ $rekapPresensi->jml_terlambat ?? 0 }}</p>
+                    <p class="text-xs font-semibold text-red-600 dark:text-red-400 uppercase tracking-wide">Terlambat</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ===== ROW 3: TABEL RIWAYAT + LEADERBOARD ===== --}}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        {{-- Riwayat Presensi --}}
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                <div>
+                    <h2 class="text-sm font-bold text-slate-900 dark:text-white">Riwayat Presensi</h2>
+                    <p class="text-xs text-slate-400">Bulan {{ date('F Y') }}</p>
+                </div>
+                <a href="{{ route('pemagang.history') }}" class="text-xs font-semibold text-sky-600 hover:text-sky-700 dark:text-sky-400 hover:underline">Lihat semua →</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-slate-50 dark:bg-slate-900/50">
+                            <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">#</th>
+                            <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Tanggal</th>
+                            <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Masuk</th>
+                            <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Pulang</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                        @forelse($riwayatPresensi as $value => $item)
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                <td class="px-4 py-3 font-bold text-slate-400 text-xs">{{ $riwayatPresensi->firstItem() + $value }}</td>
+                                <td class="px-4 py-3">
+                                    <p class="font-semibold text-slate-800 dark:text-white text-xs">{{ date('d M Y', strtotime($item->tanggal_presensi)) }}</p>
+                                    <p class="text-slate-400 text-xs">{{ date('l', strtotime($item->tanggal_presensi)) }}</p>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-semibold {{ $item->jam_masuk < '08:00' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400' : 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400' }}">
+                                        {{ date('H:i', strtotime($item->jam_masuk)) }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    @if($item->jam_keluar != null)
+                                        <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-semibold {{ $item->jam_keluar > '16:00' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400' }}">
+                                            {{ date('H:i', strtotime($item->jam_keluar)) }}
+                                        </span>
+                                    @else
+                                        <span class="text-xs text-slate-400">–</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="px-4 py-8 text-center text-slate-400 text-sm">Belum ada data presensi</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            @if($riwayatPresensi->hasPages())
+                <div class="px-6 py-3 border-t border-slate-100 dark:border-slate-700">
+                    {{ $riwayatPresensi->links() }}
+                </div>
+            @endif
+        </div>
+
+        {{-- Leaderboard --}}
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700">
+                <h2 class="text-sm font-bold text-slate-900 dark:text-white">Leaderboard Hari Ini</h2>
+                <p class="text-xs text-slate-400">{{ date('d F Y') }} – Siapa yang paling awal?</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-slate-50 dark:bg-slate-900/50">
+                            <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">#</th>
+                            <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Nama</th>
+                            <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Masuk</th>
+                            <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Pulang</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                        @forelse($leaderboard as $value => $item)
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                <td class="px-4 py-3">
+                                    @if($leaderboard->firstItem() + $value == 1)
+                                        <span class="text-lg">🥇</span>
+                                    @elseif($leaderboard->firstItem() + $value == 2)
+                                        <span class="text-lg">🥈</span>
+                                    @elseif($leaderboard->firstItem() + $value == 3)
+                                        <span class="text-lg">🥉</span>
+                                    @else
+                                        <span class="text-xs font-bold text-slate-400">{{ $leaderboard->firstItem() + $value }}</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-7 h-7 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                                            {{ strtoupper(substr($item->nama_lengkap, 0, 1)) }}
+                                        </div>
+                                        <div>
+                                            <p class="font-semibold text-slate-800 dark:text-white text-xs">{{ $item->nama_lengkap }}</p>
+                                            <p class="text-slate-400 text-xs">{{ $item->jabatan }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-semibold {{ $item->jam_masuk < '08:00' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400' : 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400' }}">
+                                        {{ date('H:i', strtotime($item->jam_masuk)) }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    @if($item->jam_keluar != null)
+                                        <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-semibold {{ $item->jam_keluar > '16:00' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400' }}">
+                                            {{ date('H:i', strtotime($item->jam_keluar)) }}
+                                        </span>
+                                    @else
+                                        <span class="text-xs text-slate-400">–</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="px-4 py-8 text-center text-slate-400 text-sm">Belum ada pemagang yang presensi hari ini</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            @if($leaderboard->hasPages())
+                <div class="px-6 py-3 border-t border-slate-100 dark:border-slate-700">
+                    {{ $leaderboard->links() }}
+                </div>
+            @endif
+        </div>
+    </div>
+
+</div>
 @endsection

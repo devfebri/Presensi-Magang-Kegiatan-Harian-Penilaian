@@ -357,7 +357,7 @@
                 html: "<p>Data yang dihapus tidak dapat dipulihkan kembali!</p>" +
                     "<div class='divider'></div>" +
                     "<div class='flex flex-col'>" +
-                    "<b>Karyawan: " + nama + "</b>" +
+                    "<b>Pemagang: " + nama + "</b>" +
                     "</div>",
                 icon: 'warning',
                 showCancelButton: true,

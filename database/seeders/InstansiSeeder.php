@@ -2,28 +2,28 @@
 
 namespace Database\Seeders;
 
-use App\Models\Departemen;
+use App\Models\Instansi;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class DepartemenSeeder extends Seeder
+class InstansiSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Departemen::create([
+        Instansi::create([
             'kode' => 'D001',
-            'nama' => 'Technology & Infomation',
+            'nama' => 'SMKN 1 Kota Jambi',
         ]);
-        Departemen::create([
+        Instansi::create([
             'kode' => 'D002',
-            'nama' => 'Marketing',
+            'nama' => 'Universitas Budidaya',
         ]);
-        Departemen::create([
+        Instansi::create([
             'kode' => 'D003',
-            'nama' => 'Human Resource',
+            'nama' => 'SMKN 2 Kota Jambi',
         ]);
     }
 }

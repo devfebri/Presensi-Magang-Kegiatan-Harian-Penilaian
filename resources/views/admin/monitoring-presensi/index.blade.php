@@ -24,7 +24,7 @@
                     <tr>
                         <th></th>
                         <th>NIK</th>
-                        <th>Nama Karyawan</th>
+                        <th>Nama Pemagang</th>
                         <th>Departemen</th>
                         <th>Jam Masuk</th>
                         <th>Foto & Lokasi</th>
@@ -38,7 +38,7 @@
                         <tr class="hover">
                             <td class="font-bold">{{ $monitoring->firstItem() + $value }}</td>
                             <td class="text-slate-500 dark:text-slate-300">{{ $item->nik }}</td>
-                            <td class="text-slate-500 dark:text-slate-300">{{ $item->nama_karyawan }}</td>
+                            <td class="text-slate-500 dark:text-slate-300">{{ $item->nama_pemagang }}</td>
                             <td class="text-slate-500 dark:text-slate-300">{{ $item->nama_departemen }}</td>
                             <td class="text-slate-500 dark:text-slate-300">{{ $item->jam_masuk }}</td>
                             <td class="text-slate-500 dark:text-slate-300">

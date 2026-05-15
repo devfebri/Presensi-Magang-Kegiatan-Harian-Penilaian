@@ -18,8 +18,8 @@
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('admin.karyawan')" :active="request()->routeIs('admin.karyawan')">
-                        {{ __('Data Karyawan') }}
+                    <x-nav-link :href="route('admin.pemagang')" :active="request()->routeIs('admin.pemagang')">
+                        {{ __('Data Pemagang') }}
                     </x-nav-link>
                 </div>
 
@@ -109,8 +109,8 @@
         </div>
 
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('admin.karyawan')" :active="request()->routeIs('admin.karyawan')">
-                {{ __('Data Karyawan') }}
+            <x-responsive-nav-link :href="route('admin.pemagang')" :active="request()->routeIs('admin.pemagang')">
+                {{ __('Data Pemagang') }}
             </x-responsive-nav-link>
         </div>
 

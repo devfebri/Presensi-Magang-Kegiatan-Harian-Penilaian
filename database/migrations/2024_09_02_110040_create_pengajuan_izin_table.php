@@ -18,7 +18,7 @@ return new class extends Migration
             $table->char('status', 1);
             $table->text('keterangan')->nullable();
             $table->char('status_approved', 1)->default(1);
-            $table->foreign('nik')->references('nik')->on('karyawan');
+            $table->foreign('nik')->references('nik')->on('pemagang');
             $table->timestamps();
         });
     }

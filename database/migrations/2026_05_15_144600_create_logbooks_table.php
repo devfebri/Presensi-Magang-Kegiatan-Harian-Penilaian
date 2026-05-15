@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('logbooks', function (Blueprint $table) {
+            $table->id();
+            $table->string('nik');
+            $table->foreignId('instansi_id')->constrained('instansi', 'id');
+            $table->date('tanggal');
+            $table->text('kegiatann_hari_ini');
+            $table->foreign('nik')->references('nik')->on('pemagang');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('logbooks');
+    }
+};

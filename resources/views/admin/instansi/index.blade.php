@@ -1,54 +1,81 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                {{ __("Data Departemen") }}
-            </h2>
-            <label class="btn btn-primary btn-sm" for="create_modal">Tambah Data</label>
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gov-primary rounded-lg flex items-center justify-center text-white">
+                    <i class="ri-organization-chart text-lg"></i>
+                </div>
+                <h2 class="text-2xl font-bold leading-tight text-gov-primary">
+                    {{ __('Data Instansi') }}
+                </h2>
+            </div>
+            <label class="gov-btn-primary cursor-pointer" for="create_modal">
+                <i class="ri-add-line"></i>
+                Tambah Instansi
+            </label>
         </div>
     </x-slot>
 
-    <div class="container mx-auto px-5 pt-5">
-        <div>
-            <form action="{{ route("admin.departemen") }}" method="get" enctype="multipart/form-data" class="my-3">
-                <div class="flex w-full flex-wrap gap-2 md:flex-nowrap">
-                    <input type="text" name="cari_departemen" placeholder="Pencarian" class="input input-bordered w-full" value="{{ request()->cari_departemen }}" />
-                    <button type="submit" class="btn btn-success w-full md:w-14">
-                        <i class="ri-search-2-line text-lg text-white"></i>
-                    </button>
+    <div class="space-y-6">
+        <!-- Search Section -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <form action="{{ route('admin.instansi') }}" method="get" enctype="multipart/form-data" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="gov-form-label">Cari Instansi</label>
+                        <input type="text" name="cari_instansi" placeholder="Pencarian..." class="gov-form-input"
+                            value="{{ request()->cari_instansi }}" />
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="gov-btn-primary w-full">
+                            <i class="ri-search-2-line"></i>
+                            Cari
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
-        <div class="w-full overflow-x-auto rounded-md bg-slate-200 px-10">
-            <table id="tabelPresensi" class="table mb-4 w-full border-collapse items-center border-gray-200 align-top dark:border-white/40">
-                <thead class="text-sm text-gray-800 dark:text-gray-300">
+
+        <!-- Table Section -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-gray-50">
                     <tr>
-                        <th></th>
-                        <th>Kode</th>
-                        <th>Nama</th>
-                        <th>Aksi</th>
+                        <th class="px-4 py-3 text-left font-semibold">#</th>
+                        <th class="px-4 py-3 text-left font-semibold">Kode</th>
+                        <th class="px-4 py-3 text-left font-semibold">Nama Instansi</th>
+                        <th class="px-4 py-3 text-left font-semibold">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($departemen as $value => $item)
-                        <tr class="hover">
-                            <td class="font-bold">{{ $departemen ->firstItem() + $value }}</td>
-                            <td class="text-slate-500 dark:text-slate-300">{{ $item->kode }}</td>
-                            <td class="text-slate-500 dark:text-slate-300">{{ $item->nama }}</td>
-                            <td>
-                                <label class="btn btn-warning btn-sm" for="edit_button" onclick="return edit_button('{{ $item->id }}')">
-                                    <i class="ri-pencil-fill"></i>
-                                </label>
-                                <label class="btn btn-error btn-sm" onclick="return delete_button('{{ $item->id }}', '{{ $item->nama }}')">
-                                    <i class="ri-delete-bin-line"></i>
-                                </label>
+                    @foreach ($instansi as $value => $item)
+                        <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td class="px-4 py-3 font-semibold text-gray-700">{{ $instansi->firstItem() + $value }}
+                            </td>
+                            <td class="px-4 py-3">
+                                <span class="gov-badge-primary">{{ $item->kode }}</span>
+                            </td>
+                            <td class="px-4 py-3 text-gray-800">{{ $item->nama }}</td>
+                            <td class="px-4 py-3">
+                                <div class="flex space-x-2">
+                                    <button class="gov-btn-warning text-sm"
+                                        onclick="return edit_button('{{ $item->id }}')">
+                                        <i class="ri-pencil-fill"></i>
+                                        Edit
+                                    </button>
+                                    <button class="gov-btn-danger text-sm"
+                                        onclick="return delete_button('{{ $item->id }}', '{{ $item->nama }}')">
+                                        <i class="ri-delete-bin-line"></i>
+                                        Hapus
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
             <div class="mx-3 mb-5">
-                {{ $departemen->links() }}
+                {{ $instansi->links() }}
             </div>
         </div>
     </div>
@@ -64,7 +91,7 @@
                 </label>
             </div>
             <div>
-                <form action="{{ route("admin.departemen.store") }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.instansi.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <button type="reset" class="btn btn-neutral btn-sm">Reset</button>
                     <label class="form-control w-full">
@@ -73,8 +100,9 @@
                                 <span class="label-text font-semibold">Kode<span class="text-red-500">*</span></span>
                             </span>
                         </div>
-                        <input type="text" name="kode" placeholder="Kode" class="input input-bordered w-full text-blue-700" value="{{ old("kode") }}" required />
-                        @error("kode")
+                        <input type="text" name="kode" placeholder="Kode"
+                            class="input input-bordered w-full text-blue-700" value="{{ old('kode') }}" required />
+                        @error('kode')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -86,8 +114,9 @@
                                 <span class="label-text font-semibold">Nama<span class="text-red-500">*</span></span>
                             </span>
                         </div>
-                        <input type="text" name="nama" placeholder="Nama" class="input input-bordered w-full text-blue-700" value="{{ old("nama") }}" required />
-                        @error("nama")
+                        <input type="text" name="nama" placeholder="Nama"
+                            class="input input-bordered w-full text-blue-700" value="{{ old('nama') }}" required />
+                        @error('nama')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -111,16 +140,18 @@
                 </label>
             </div>
             <div>
-                <form action="{{ route("admin.departemen.update") }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.instansi.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
                     <input type="text" name="id" hidden>
                     <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text font-semibold">Kode<span class="text-red-500">*</span></span>
                             <span class="label-text-alt" id="loading_edit1"></span>
                         </div>
-                        <input type="text" name="kode" placeholder="Kode" class="input input-bordered w-full text-blue-700" required />
-                        @error("kode")
+                        <input type="text" name="kode" placeholder="Kode"
+                            class="input input-bordered w-full text-blue-700" required />
+                        @error('kode')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -131,8 +162,9 @@
                             <span class="label-text font-semibold">Nama<span class="text-red-500">*</span></span>
                             <span class="label-text-alt" id="loading_edit2"></span>
                         </div>
-                        <input type="text" name="nama" placeholder="Nama" class="input input-bordered w-full text-blue-700" required />
-                        @error("nama")
+                        <input type="text" name="nama" placeholder="Nama"
+                            class="input input-bordered w-full text-blue-700" required />
+                        @error('nama')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -146,20 +178,20 @@
     {{-- Akhir Modal Edit --}}
 
     <script>
-        @if (session()->has("success"))
+        @if (session()->has('success'))
             Swal.fire({
                 title: 'Berhasil',
-                text: '{{ session("success") }}',
+                text: '{{ session('success') }}',
                 icon: 'success',
                 confirmButtonColor: '#6419E6',
                 confirmButtonText: 'OK',
             });
         @endif
 
-        @if (session()->has("error"))
+        @if (session()->has('error'))
             Swal.fire({
                 title: 'Gagal',
-                text: '{{ session("error") }}',
+                text: '{{ session('error') }}',
                 icon: 'error',
                 confirmButtonColor: '#6419E6',
                 confirmButtonText: 'OK',
@@ -172,31 +204,29 @@
             $("#loading_edit1").html(loading);
             $("#loading_edit2").html(loading);
 
-            $.ajax({
-                type: "get",
-                url: "{{ route('admin.departemen.edit') }}",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    "id": id
-                },
-                success: function(data) {
-                    // console.log(data);
-                    let items = [];
-                    $.each(data, function(key, val) {
-                        items.push(val);
-                    });
-
-                    $("input[name='id']").val(items[0]);
-                    $("input[name='kode']").val(items[1]);
-                    $("input[name='nama']").val(items[2]);
-
+            axios.get("{{ route('admin.instansi.edit') }}", {
+                    params: {
+                        id: id
+                    }
+                })
+                .then(function(response) {
+                    let data = response.data;
+                    $("input[name='id']").val(data.id);
+                    $("input[name='kode']").val(data.kode);
+                    $("input[name='nama']").val(data.nama);
 
                     // Loading effect end
                     loading = "";
                     $("#loading_edit1").html(loading);
                     $("#loading_edit2").html(loading);
-                }
-            });
+                })
+                .catch(function(error) {
+                    console.error(error);
+                    // Loading effect end
+                    loading = "";
+                    $("#loading_edit1").html(loading);
+                    $("#loading_edit2").html(loading);
+                });
         }
 
         function delete_button(id, nama) {
@@ -205,7 +235,7 @@
                 html: "<p>Data yang dihapus tidak dapat dipulihkan kembali!</p>" +
                     "<div class='divider'></div>" +
                     "<div class='flex flex-col'>" +
-                    "<b>Karyawan: " + nama + "</b>" +
+                    "<b>Instansi: " + nama + "</b>" +
                     "</div>",
                 icon: 'warning',
                 showCancelButton: true,
@@ -215,17 +245,14 @@
                 cancelButtonText: 'Batal',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $.ajax({
-                        type: "post",
-                        url: "{{ route('admin.departemen.delete') }}",
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            "id": id
-                        },
-                        success: function(response) {
+                    axios.post("{{ route('admin.instansi.delete') }}", {
+                            id: id,
+                            _token: "{{ csrf_token() }}"
+                        })
+                        .then(function(response) {
                             Swal.fire({
                                 title: 'Berhasil',
-                                text: response.message,
+                                text: response.data.message,
                                 icon: 'success',
                                 confirmButtonColor: '#6419E6',
                                 confirmButtonText: 'OK'
@@ -234,15 +261,14 @@
                                     location.reload();
                                 }
                             });
-                        },
-                        error: function(response) {
+                        })
+                        .catch(function(error) {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Gagal',
-                                text: response.responseJSON.message
-                            })
-                        }
-                    });
+                                text: error.response?.data?.message || 'Terjadi kesalahan'
+                            });
+                        });
                 }
             })
         }

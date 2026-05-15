@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Karyawan;
+use App\Models\Pemagang;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +14,7 @@ class DashboardController extends Controller
         $title = "Dashboard";
 
         $hariIni = Carbon::now()->format("Y-m-d");
-        $user = Auth::guard('karyawan')->user();
+        $user = Auth::guard('pemagang')->user();
         $presensiHariIni = DB::table("presensi")
             ->where('nik', $user->nik)
             ->where('tanggal_presensi', $hariIni)
@@ -45,7 +45,7 @@ class DashboardController extends Controller
             ->first();
 
         $leaderboard = DB::table("presensi as p")
-            ->join('karyawan as k', 'k.nik', '=', 'p.nik')
+            ->join('pemagang as k', 'k.nik', '=', 'p.nik')
             ->where('tanggal_presensi', $hariIni)
             ->orderBy('jam_masuk', 'asc')
             ->paginate(10);
@@ -59,7 +59,7 @@ class DashboardController extends Controller
 
         $hariIni = Carbon::now()->format("Y-m-d");
 
-        $totalKaryawan = Karyawan::count();
+        $totalPemagang = Pemagang::count();
 
         $rekapPresensi = DB::table("presensi")
             ->selectRaw("COUNT(nik) as jml_kehadiran, SUM(IF (jam_masuk > '08:00',1,0)) as jml_terlambat")
@@ -72,6 +72,6 @@ class DashboardController extends Controller
             ->where('tanggal_pengajuan', $hariIni)
             ->first();
 
-        return view("admin.dashboard", compact("title", "totalKaryawan", "rekapPresensi", "rekapPengajuanPresensi"));
+        return view("admin.dashboard", compact("title", "totalPemagang", "rekapPresensi", "rekapPengajuanPresensi"));
     }
 }

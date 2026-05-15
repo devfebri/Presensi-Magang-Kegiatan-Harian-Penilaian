@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('foto_keluar')->nullable();
             $table->string('lokasi_masuk');
             $table->string('lokasi_keluar')->nullable();
-            $table->foreign('nik')->references('nik')->on('karyawan');
+            $table->foreign('nik')->references('nik')->on('pemagang');
             $table->timestamps();
         });
     }
