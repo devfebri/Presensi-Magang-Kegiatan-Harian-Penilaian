@@ -11,6 +11,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}" />
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -26,8 +27,8 @@
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
         <!-- Logo Area -->
         <div class="mb-8 text-center">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-white rounded-xl shadow-lg mb-4">
-                <i class="ri-government-line text-3xl text-gov-primary"></i>
+            <div class="w-20 h-20 flex items-center justify-center mx-auto mb-8">
+                <img src="{{ asset('img/favicon.png') }}" alt="SIMWEB Logo">
             </div>
             <h1 class="text-3xl font-bold text-white">SIMWEB</h1>
             <p class="text-blue-100 mt-2">Kantor Wilayah Kementerian Hukum Provinsi Jambi</p>

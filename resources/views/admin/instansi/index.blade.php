@@ -142,14 +142,13 @@
             <div>
                 <form action="{{ route('admin.instansi.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    @method('PUT')
-                    <input type="text" name="id" hidden>
+                    <input type="text" name="id" id="edit_id" hidden>
                     <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text font-semibold">Kode<span class="text-red-500">*</span></span>
                             <span class="label-text-alt" id="loading_edit1"></span>
                         </div>
-                        <input type="text" name="kode" placeholder="Kode"
+                        <input type="text" name="kode" id="edit_kode" placeholder="Kode"
                             class="input input-bordered w-full text-blue-700" required />
                         @error('kode')
                             <div class="label">
@@ -162,7 +161,7 @@
                             <span class="label-text font-semibold">Nama<span class="text-red-500">*</span></span>
                             <span class="label-text-alt" id="loading_edit2"></span>
                         </div>
-                        <input type="text" name="nama" placeholder="Nama"
+                        <input type="text" name="nama" id="edit_nama" placeholder="Nama"
                             class="input input-bordered w-full text-blue-700" required />
                         @error('nama')
                             <div class="label">
@@ -204,6 +203,9 @@
             $("#loading_edit1").html(loading);
             $("#loading_edit2").html(loading);
 
+            // Buka modal edit terlebih dahulu
+            document.getElementById('edit_button').checked = true;
+
             axios.get("{{ route('admin.instansi.edit') }}", {
                     params: {
                         id: id
@@ -211,9 +213,9 @@
                 })
                 .then(function(response) {
                     let data = response.data;
-                    $("input[name='id']").val(data.id);
-                    $("input[name='kode']").val(data.kode);
-                    $("input[name='nama']").val(data.nama);
+                    $("#edit_id").val(data.id);
+                    $("#edit_kode").val(data.kode);
+                    $("#edit_nama").val(data.nama);
 
                     // Loading effect end
                     loading = "";
@@ -226,6 +228,11 @@
                     loading = "";
                     $("#loading_edit1").html(loading);
                     $("#loading_edit2").html(loading);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: 'Gagal memuat data instansi'
+                    });
                 });
         }
 
