@@ -144,10 +144,15 @@
                         <i class="ri-team-line"></i>
                         <span>Kelola Pemagang</span>
                     </a>
+                    <a href="{{ route('admin.pembimbing') }}"
+                        class="flex items-center space-x-2 p-3 rounded-lg bg-blue-50 hover:bg-blue-100 text-gov-primary font-semibold transition-colors">
+                        <i class="ri-team-line"></i>
+                        <span>Kelola Pembimbing</span>
+                    </a>
                     <a href="{{ route('admin.instansi') }}"
                         class="flex items-center space-x-2 p-3 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-600 font-semibold transition-colors">
                         <i class="ri-organization-chart text-lg"></i>
-                        <span>Kelola Instansi</span>
+                        <span>Kelola Instansi</span>`
                     </a>
                     <a href="{{ route('admin.lokasi-kantor') }}"
                         class="flex items-center space-x-2 p-3 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-600 font-semibold transition-colors">

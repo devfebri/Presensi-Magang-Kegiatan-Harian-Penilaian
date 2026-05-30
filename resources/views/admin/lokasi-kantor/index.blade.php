@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                {{ __("Lokasi Kantor") }}
+                {{ __('Lokasi Absensi') }}
             </h2>
             <label class="btn btn-primary btn-sm" for="create_modal">Tambah Data</label>
         </div>
@@ -10,7 +10,8 @@
 
     <div class="container mx-auto px-5 pt-5">
         <div class="w-full overflow-x-auto rounded-md bg-slate-200 px-10">
-            <table id="tabelPresensi" class="table mb-4 w-full border-collapse items-center border-gray-200 align-top dark:border-white/40">
+            <table id="tabelPresensi"
+                class="table mb-4 w-full border-collapse items-center border-gray-200 align-top dark:border-white/40">
                 <thead class="text-sm text-gray-800 dark:text-gray-300">
                     <tr>
                         <th></th>
@@ -38,10 +39,12 @@
                                 @endif
                             </td>
                             <td>
-                                <label class="btn btn-warning btn-sm" for="edit_button" onclick="return edit_button('{{ $item->id }}')">
+                                <label class="btn btn-warning btn-sm" for="edit_button"
+                                    onclick="return edit_button('{{ $item->id }}')">
                                     <i class="ri-pencil-fill"></i>
                                 </label>
-                                <label class="btn btn-error btn-sm" onclick="return delete_button('{{ $item->id }}', '{{ $item->nama }}')">
+                                <label class="btn btn-error btn-sm"
+                                    onclick="return delete_button('{{ $item->id }}', '{{ $item->nama }}')">
                                     <i class="ri-delete-bin-line"></i>
                                 </label>
                             </td>
@@ -60,13 +63,13 @@
     <div class="modal" role="dialog">
         <div class="modal-box">
             <div class="mb-3 flex justify-between">
-                <h3 class="text-lg font-bold">Tambah {{ $title }}</h3>
+                <h3 class="text-lg font-bold">Tambah Lokasi Absensi</h3>
                 <label for="create_modal" class="cursor-pointer">
                     <i class="ri-close-large-fill"></i>
                 </label>
             </div>
             <div>
-                <form action="{{ route("admin.lokasi-kantor.store") }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.lokasi-kantor.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <button type="reset" class="btn btn-neutral btn-sm">Reset</button>
                     <label class="form-control w-full">
@@ -75,8 +78,9 @@
                                 <span class="label-text font-semibold">Kota<span class="text-red-500">*</span></span>
                             </span>
                         </div>
-                        <input type="text" name="kota" placeholder="Kota" class="input input-bordered w-full text-blue-700" value="{{ old("kota") }}" required />
-                        @error("kota")
+                        <input type="text" name="kota" placeholder="Kota"
+                            class="input input-bordered w-full text-blue-700" value="{{ old('kota') }}" required />
+                        @error('kota')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -88,8 +92,8 @@
                                 <span class="label-text font-semibold">Alamat<span class="text-red-500">*</span></span>
                             </span>
                         </div>
-                        <textarea name="alamat" placeholder="Alamat" class="textarea textarea-bordered w-full text-blue-700">{{ old("alamat") }}</textarea>
-                        @error("alamat")
+                        <textarea name="alamat" placeholder="Alamat" class="textarea textarea-bordered w-full text-blue-700">{{ old('alamat') }}</textarea>
+                        @error('alamat')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -98,11 +102,13 @@
                     <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">Latitude<span class="text-red-500">*</span></span>
+                                <span class="label-text font-semibold">Latitude<span
+                                        class="text-red-500">*</span></span>
                             </span>
                         </div>
-                        <input type="text" name="latitude" placeholder="Latitude" class="input input-bordered w-full text-blue-700" value="{{ old("latitude") }}" required />
-                        @error("latitude")
+                        <input type="text" name="latitude" placeholder="Latitude"
+                            class="input input-bordered w-full text-blue-700" value="{{ old('latitude') }}" required />
+                        @error('latitude')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -111,11 +117,14 @@
                     <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">Longitude<span class="text-red-500">*</span></span>
+                                <span class="label-text font-semibold">Longitude<span
+                                        class="text-red-500">*</span></span>
                             </span>
                         </div>
-                        <input type="text" name="longitude" placeholder="Longitude" class="input input-bordered w-full text-blue-700" value="{{ old("longitude") }}" required />
-                        @error("longitude")
+                        <input type="text" name="longitude" placeholder="Longitude"
+                            class="input input-bordered w-full text-blue-700" value="{{ old('longitude') }}"
+                            required />
+                        @error('longitude')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -127,8 +136,9 @@
                                 <span class="label-text font-semibold">Radius<span class="text-red-500">*</span></span>
                             </span>
                         </div>
-                        <input type="number" min="0" name="radius" placeholder="Radius" class="input input-bordered w-full text-blue-700" value="{{ old("radius") }}" required />
-                        @error("radius")
+                        <input type="number" min="0" name="radius" placeholder="Radius"
+                            class="input input-bordered w-full text-blue-700" value="{{ old('radius') }}" required />
+                        @error('radius')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -137,22 +147,25 @@
                     <div>
                         <div class="label">
                             <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">Is Used?<span class="text-red-500">*</span></span>
+                                <span class="label-text font-semibold">Is Used?<span
+                                        class="text-red-500">*</span></span>
                             </span>
                         </div>
                         <div class="form-control">
                             <label class="label cursor-pointer">
                                 <span class="label-text">Iya</span>
-                                <input type="radio" name="is_used" value='1' class="radio checked:bg-red-500" />
+                                <input type="radio" name="is_used" value='1'
+                                    class="radio checked:bg-red-500" />
                             </label>
                         </div>
                         <div class="form-control">
                             <label class="label cursor-pointer">
                                 <span class="label-text">Tidak</span>
-                                <input type="radio" name="is_used" value='0' class="radio checked:bg-blue-500" checked />
+                                <input type="radio" name="is_used" value='0'
+                                    class="radio checked:bg-blue-500" checked />
                             </label>
                         </div>
-                        @error("is_used")
+                        @error('is_used')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -170,13 +183,14 @@
     <div class="modal" role="dialog">
         <div class="modal-box">
             <div class="mb-3 flex justify-between">
-                <h3 class="text-lg font-bold">Ubah {{ $title }}</h3>
+                <h3 class="text-lg font-bold">Ubah Lokasi Absensi   </h3>
                 <label for="edit_button" class="cursor-pointer">
                     <i class="ri-close-large-fill"></i>
                 </label>
             </div>
             <div>
-                <form action="{{ route("admin.lokasi-kantor.update") }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.lokasi-kantor.update') }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
                     <input type="text" name="id" hidden>
                     <label class="form-control w-full">
@@ -186,8 +200,9 @@
                                 <span class="label-text-alt" id="loading_edit1"></span>
                             </span>
                         </div>
-                        <input type="text" name="kota" placeholder="Kota" class="input input-bordered w-full text-blue-700" value="{{ old("kota") }}" required />
-                        @error("kota")
+                        <input type="text" name="kota" placeholder="Kota"
+                            class="input input-bordered w-full text-blue-700" value="{{ old('kota') }}" required />
+                        @error('kota')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -196,12 +211,13 @@
                     <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">Alamat<span class="text-red-500">*</span></span>
+                                <span class="label-text font-semibold">Alamat<span
+                                        class="text-red-500">*</span></span>
                                 <span class="label-text-alt" id="loading_edit2"></span>
                             </span>
                         </div>
-                        <textarea name="alamat" placeholder="Alamat" class="textarea textarea-bordered w-full text-blue-700">{{ old("alamat") }}</textarea>
-                        @error("alamat")
+                        <textarea name="alamat" placeholder="Alamat" class="textarea textarea-bordered w-full text-blue-700">{{ old('alamat') }}</textarea>
+                        @error('alamat')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -210,12 +226,15 @@
                     <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">Latitude<span class="text-red-500">*</span></span>
+                                <span class="label-text font-semibold">Latitude<span
+                                        class="text-red-500">*</span></span>
                                 <span class="label-text-alt" id="loading_edit3"></span>
                             </span>
                         </div>
-                        <input type="text" name="latitude" placeholder="Latitude" class="input input-bordered w-full text-blue-700" value="{{ old("latitude") }}" required />
-                        @error("latitude")
+                        <input type="text" name="latitude" placeholder="Latitude"
+                            class="input input-bordered w-full text-blue-700" value="{{ old('latitude') }}"
+                            required />
+                        @error('latitude')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -224,12 +243,15 @@
                     <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">Longitude<span class="text-red-500">*</span></span>
+                                <span class="label-text font-semibold">Longitude<span
+                                        class="text-red-500">*</span></span>
                                 <span class="label-text-alt" id="loading_edit4"></span>
                             </span>
                         </div>
-                        <input type="text" name="longitude" placeholder="Longitude" class="input input-bordered w-full text-blue-700" value="{{ old("longitude") }}" required />
-                        @error("longitude")
+                        <input type="text" name="longitude" placeholder="Longitude"
+                            class="input input-bordered w-full text-blue-700" value="{{ old('longitude') }}"
+                            required />
+                        @error('longitude')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -238,12 +260,14 @@
                     <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">Radius<span class="text-red-500">*</span></span>
+                                <span class="label-text font-semibold">Radius<span
+                                        class="text-red-500">*</span></span>
                                 <span class="label-text-alt" id="loading_edit6"></span>
                             </span>
                         </div>
-                        <input type="number" min="0" name="radius" placeholder="Radius" class="input input-bordered w-full text-blue-700" value="{{ old("radius") }}" required />
-                        @error("radius")
+                        <input type="number" min="0" name="radius" placeholder="Radius"
+                            class="input input-bordered w-full text-blue-700" value="{{ old('radius') }}" required />
+                        @error('radius')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -252,23 +276,26 @@
                     <div>
                         <div class="label">
                             <span class="label-text font-semibold">
-                                <span class="label-text font-semibold">Is Used?<span class="text-red-500">*</span></span>
+                                <span class="label-text font-semibold">Is Used?<span
+                                        class="text-red-500">*</span></span>
                                 <span class="label-text-alt" id="loading_edit5"></span>
                             </span>
                         </div>
                         <div class="form-control">
                             <label class="label cursor-pointer">
                                 <span class="label-text">Iya</span>
-                                <input type="radio" name="is_used" value='1' class="radio checked:bg-red-500" />
+                                <input type="radio" name="is_used" value='1'
+                                    class="radio checked:bg-red-500" />
                             </label>
                         </div>
                         <div class="form-control">
                             <label class="label cursor-pointer">
                                 <span class="label-text">Tidak</span>
-                                <input type="radio" name="is_used" value='0' class="radio checked:bg-blue-500" checked />
+                                <input type="radio" name="is_used" value='0'
+                                    class="radio checked:bg-blue-500" checked />
                             </label>
                         </div>
-                        @error("is_used")
+                        @error('is_used')
                             <div class="label">
                                 <span class="label-text-alt text-sm text-error">{{ $message }}</span>
                             </div>
@@ -282,20 +309,20 @@
     {{-- Akhir Modal Edit --}}
 
     <script>
-        @if (session()->has("success"))
+        @if (session()->has('success'))
             Swal.fire({
                 title: 'Berhasil',
-                text: '{{ session("success") }}',
+                text: '{{ session('success') }}',
                 icon: 'success',
                 confirmButtonColor: '#6419E6',
                 confirmButtonText: 'OK',
             });
         @endif
 
-        @if (session()->has("error"))
+        @if (session()->has('error'))
             Swal.fire({
                 title: 'Gagal',
-                text: '{{ session("error") }}',
+                text: '{{ session('error') }}',
                 icon: 'error',
                 confirmButtonColor: '#6419E6',
                 confirmButtonText: 'OK',

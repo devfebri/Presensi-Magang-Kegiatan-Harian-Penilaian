@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Presensi Magang - Kementerian Hukum Provinsi Jambi</title>
+    <title>Kementerian Hukum Provinsi Jambi</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -132,7 +132,7 @@
                     <div>
                         <h1
                             class="text-xl md:text-2xl font-outfit font-bold text-slate-900 dark:text-white tracking-tight">
-                            Presensi<span class="text-brand-500">Magang</span></h1>
+                            SI<span class="text-brand-500">Magang</span></h1>
                         <p
                             class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                             Kemenkumham Jambi</p>

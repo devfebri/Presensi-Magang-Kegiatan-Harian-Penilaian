@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\PemagangController;
 use App\Http\Controllers\PembimbingController;
+use App\Http\Controllers\AdminPembimbingController;
 use App\Http\Controllers\LokasiKantorController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\ProfileController;
@@ -100,6 +101,12 @@ Route::group([
     Route::get('/instansi/perbarui', [InstansiController::class, 'edit'])->name('admin.instansi.edit');
     Route::post('/instansi/perbarui', [InstansiController::class, 'update'])->name('admin.instansi.update');
     Route::post('/instansi/hapus', [InstansiController::class, 'delete'])->name('admin.instansi.delete');
+
+    Route::get('/pembimbing', [AdminPembimbingController::class, 'index'])->name('admin.pembimbing');
+    Route::post('/pembimbing/tambah', [AdminPembimbingController::class, 'store'])->name('admin.pembimbing.store');
+    Route::get('/pembimbing/perbarui', [AdminPembimbingController::class, 'edit'])->name('admin.pembimbing.edit');
+    Route::post('/pembimbing/perbarui', [AdminPembimbingController::class, 'update'])->name('admin.pembimbing.update');
+    Route::post('/pembimbing/hapus', [AdminPembimbingController::class, 'delete'])->name('admin.pembimbing.delete');
 
     Route::get('/monitoring-presensi', [PresensiController::class, 'monitoringPresensi'])->name('admin.monitoring-presensi');
     Route::post('/monitoring-presensi', [PresensiController::class, 'viewLokasi'])->name('admin.monitoring-presensi.lokasi');

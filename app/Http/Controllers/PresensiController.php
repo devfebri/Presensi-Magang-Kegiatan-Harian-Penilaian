@@ -276,22 +276,22 @@ class PresensiController extends Controller
         $riwayatPresensi = DB::table("presensi as p")
             ->join('pemagang as k', 'p.nik', '=', 'k.nik')
             ->join('instansi as d', 'k.instansi_id', '=', 'd.id')
-            ->whereMonth('tanggal_presensi', Carbon::make($bulan)->format('m'))
-            ->whereYear('tanggal_presensi', Carbon::make($bulan)->format('Y'))
+            ->whereMonth('p.tanggal_presensi', Carbon::make($bulan)->format('m'))
+            ->whereYear('p.tanggal_presensi', Carbon::make($bulan)->format('Y'))
             ->select(
                 'p.nik',
                 'k.nama_lengkap as nama_pemagang',
                 'k.jabatan as jabatan_pemagang',
                 'd.nama as nama_instansi'
             )
-            ->selectRaw("COUNT(p.nik) as total_kehadiran, SUM(IF (jam_masuk > '08:00',1,0)) as total_terlambat")
+            ->selectRaw("COUNT(p.nik) as total_kehadiran, SUM(IF (p.jam_masuk > '08:00',1,0)) as total_terlambat")
             ->groupBy(
                 'p.nik',
                 'k.nama_lengkap',
                 'k.jabatan',
                 'd.nama'
             )
-            ->orderBy("tanggal_presensi", "asc")
+            ->orderBy("k.nama_lengkap", "asc")
             ->get();
 
         // return view('admin.laporan.pdf.presensi-semua-pemagang', compact('title', 'bulan', 'riwayatPresensi'));
