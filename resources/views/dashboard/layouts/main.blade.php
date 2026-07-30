@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>{{ $title }} – SIMWEB Kemenkumham Jambi</title>
+        <title>{{ $title }} – SIMWEB Kemenkum Jambi</title>
 
         <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('img/apple-icon.png') }}" />
         <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}" />

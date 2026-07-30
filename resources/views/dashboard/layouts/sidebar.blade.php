@@ -8,17 +8,12 @@
         <a href="{{ route('pemagang.dashboard') }}" class="flex items-center gap-3">
             <div
                 class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-sky-500 flex items-center justify-center shadow-lg flex-shrink-0">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z">
-                    </path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z">
-                    </path>
-                </svg>
+                <img src="{{ asset('img/logo.jpeg') }}" class="img-fluid img-thumbnail" width="50" height="50"
+                    alt="">
             </div>
             <div>
                 <p class="font-bold text-slate-900 dark:text-white text-sm leading-tight">SIMWEB</p>
-                <p class="text-[10px] text-slate-400 uppercase tracking-wider">Kemenkumham Jambi</p>
+                <p class="text-[10px] text-slate-400 uppercase tracking-wider">Kemenkum Jambi</p>
             </div>
         </a>
     </div>

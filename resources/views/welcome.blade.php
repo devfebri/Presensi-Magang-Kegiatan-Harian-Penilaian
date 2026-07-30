@@ -135,12 +135,24 @@
                             SI<span class="text-brand-500">Magang</span></h1>
                         <p
                             class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                            Kemenkumham Jambi</p>
+                            Kemenkum Jambi</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
                     @auth
-                        <a href="{{ auth()->user()->role }}/dashboard"
+                        @php
+                            $dashboardUrl = '#';
+
+                            if (Auth::guard('web')->check()) {
+                                $dashboardUrl = route('admin.dashboard');
+                            } elseif (Auth::guard('pembimbing')->check()) {
+                                $dashboardUrl = route('pembimbing.dashboard');
+                            } elseif (Auth::guard('pemagang')->check()) {
+                                $dashboardUrl = route('pemagang.dashboard');
+                            }
+                        @endphp
+
+                        <a href="{{ $dashboardUrl }}"
                             class="relative inline-flex items-center justify-center px-4 md:px-6 py-2 md:py-2.5 overflow-hidden font-medium text-white transition duration-300 ease-out bg-brand-600 rounded-full shadow-md group hover:bg-brand-500">
                             <span
                                 class="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-brand-500 group-hover:translate-x-0 ease">
@@ -819,7 +831,7 @@
                     <div>
                         <span class="font-outfit font-bold text-slate-900 dark:text-white text-lg">Presensi<span
                                 class="text-brand-500">Magang</span></span>
-                        <p class="text-xs text-slate-500">Kemenkumham Jambi</p>
+                        <p class="text-xs text-slate-500">Kemenkum Jambi</p>
                     </div>
                 </div>
 

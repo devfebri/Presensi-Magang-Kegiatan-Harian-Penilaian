@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login Pemagang – SIMWEB Kemenkumham Jambi</title>
+    <title>Login Pemagang – SIMWEB Kemenkum Jambi</title>
 
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('img/apple-icon.png') }}" />
     <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}" />
@@ -173,7 +173,7 @@
                         </div>
                         <div>
                             <p class="font-outfit font-bold text-slate-900 text-base">SIMWEB</p>
-                            <p class="text-xs text-slate-500">Kemenkumham Jambi</p>
+                            <p class="text-xs text-slate-500">Kemenkum Jambi</p>
                         </div>
                     </div>
 

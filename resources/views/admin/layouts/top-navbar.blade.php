@@ -3,6 +3,8 @@
     <div class="px-6 py-4 flex items-center justify-between">
         <!-- Left Side - Greeting -->
         <div class="flex items-center space-x-3">
+            <img src="{{ asset('img/logo.jpeg') }}" class="img-fluid img-thumbnail" width="50" height="50"
+                alt="">
             <div>
                 <h2 class="text-sm font-semibold text-gray-500">Selamat datang,</h2>
                 <p class="text-lg font-bold text-gov-primary">{{ Auth::user()->name }}</p>
