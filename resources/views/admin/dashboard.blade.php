@@ -139,6 +139,11 @@
             <div class="bg-white rounded-xl shadow-md p-6">
                 <h3 class="text-lg font-bold text-gray-800 mb-4">Akses Cepat</h3>
                 <div class="space-y-2">
+                    <a href="{{ route('admin.periode-magang') }}"
+                        class="flex items-center space-x-2 p-3 rounded-lg bg-blue-50 hover:bg-blue-100 text-gov-primary font-semibold transition-colors">
+                        <i class="ri-team-line"></i>
+                        <span>Kelola Periode</span>
+                    </a>
                     <a href="{{ route('admin.pemagang') }}"
                         class="flex items-center space-x-2 p-3 rounded-lg bg-blue-50 hover:bg-blue-100 text-gov-primary font-semibold transition-colors">
                         <i class="ri-team-line"></i>

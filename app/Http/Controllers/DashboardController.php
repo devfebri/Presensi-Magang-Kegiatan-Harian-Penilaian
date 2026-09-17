@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pemagang;
+use App\Models\PeriodeMagang;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +51,9 @@ class DashboardController extends Controller
             ->orderBy('jam_masuk', 'asc')
             ->paginate(10);
 
-        return view("dashboard.index", compact("title", "presensiHariIni", "riwayatPresensi", "rekapPresensi", "rekapPengajuanPresensi", "leaderboard"));
+        $periodeMagang = PeriodeMagang::where('is_aktif', true)->first();
+
+        return view("dashboard.index", compact("title", "presensiHariIni", "riwayatPresensi", "rekapPresensi", "rekapPengajuanPresensi", "leaderboard", "periodeMagang"));
     }
 
     public function indexAdmin()

@@ -11,6 +11,7 @@ use App\Http\Controllers\LokasiKantorController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LogbookController;
+use App\Http\Controllers\PeriodeMagangController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -123,6 +124,12 @@ Route::group([
 
     Route::get('/administrasi-presensi', [PresensiController::class, 'indexAdmin'])->name('admin.administrasi-presensi');
     Route::post('/administrasi-presensi/status', [PresensiController::class, 'persetujuanPresensi'])->name('admin.administrasi-presensi.persetujuan');
+
+    Route::get('/periode-magang', [PeriodeMagangController::class, 'index'])->name('admin.periode-magang');
+    Route::post('/periode-magang/tambah', [PeriodeMagangController::class, 'store'])->name('admin.periode-magang.store');
+    Route::get('/periode-magang/perbarui', [PeriodeMagangController::class, 'edit'])->name('admin.periode-magang.edit');
+    Route::post('/periode-magang/perbarui', [PeriodeMagangController::class, 'update'])->name('admin.periode-magang.update');
+    Route::post('/periode-magang/hapus', [PeriodeMagangController::class, 'delete'])->name('admin.periode-magang.delete');
 });
 
 // ===================== PEMBIMBING ROUTES =====================

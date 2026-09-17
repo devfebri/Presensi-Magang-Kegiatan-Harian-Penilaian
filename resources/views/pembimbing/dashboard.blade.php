@@ -212,6 +212,54 @@
                 </div>
             </div>
 
+            {{-- Periode Magang Aktif --}}
+            @if($periodeMagang)
+            <div class="mb-6 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl px-6 py-4 shadow-lg shadow-purple-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-white/10">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0 shadow-inner">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-purple-200 uppercase tracking-wider">Periode Magang Aktif</p>
+                        <p class="text-base font-bold text-white leading-tight">{{ $periodeMagang->nama }}</p>
+                        @if($periodeMagang->keterangan)
+                            <p class="text-xs text-purple-200 mt-0.5">{{ $periodeMagang->keterangan }}</p>
+                        @endif
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <div class="flex items-center gap-1.5 bg-white/15 border border-white/20 rounded-xl px-3 py-1.5 text-sm text-white font-medium">
+                        <svg class="w-3.5 h-3.5 text-purple-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        {{ \Carbon\Carbon::parse($periodeMagang->tanggal_mulai)->translatedFormat('d M Y') }}
+                    </div>
+                    <span class="text-purple-300 font-bold">→</span>
+                    <div class="flex items-center gap-1.5 bg-white/15 border border-white/20 rounded-xl px-3 py-1.5 text-sm text-white font-medium">
+                        <svg class="w-3.5 h-3.5 text-purple-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        {{ \Carbon\Carbon::parse($periodeMagang->tanggal_selesai)->translatedFormat('d M Y') }}
+                    </div>
+                    @php
+                        $hariTersisa = \Carbon\Carbon::now()->startOfDay()->diffInDays(\Carbon\Carbon::parse($periodeMagang->tanggal_selesai)->startOfDay(), false);
+                    @endphp
+                    @if($hariTersisa >= 0)
+                        <div class="bg-white/20 rounded-xl px-3 py-1.5 text-sm text-white font-bold whitespace-nowrap">
+                            ⏳ {{ $hariTersisa }} hari lagi
+                        </div>
+                    @else
+                        <div class="bg-red-400/30 rounded-xl px-3 py-1.5 text-sm text-white font-bold whitespace-nowrap">
+                            ✓ Telah berakhir
+                        </div>
+                    @endif
+                </div>
+            </div>
+            @endif
+
             <!-- Stat Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
 

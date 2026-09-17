@@ -27,6 +27,16 @@
     </div>
     @endif
 
+    {{-- Alert error / locked --}}
+    @if(session('error'))
+    <div class="mb-5 flex items-center gap-3 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-red-700 text-sm">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+        </svg>
+        {{ session('error') }}
+    </div>
+    @endif
+
     {{-- Profile Card --}}
     <div class="bg-gradient-to-r from-purple-700 via-purple-600 to-indigo-600 rounded-2xl p-6 mb-6 shadow-xl overflow-hidden relative">
         <div class="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none"></div>
@@ -101,23 +111,77 @@
                             @else text-red-600 @endif">
                             {{ $penilaian->predikat }}
                         </p>
+                        {{-- Info periode --}}
+                        @if($penilaian->periode)
+                        <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            {{ $penilaian->periode->nama }}
+                        </p>
+                        @endif
                     </div>
                     <div class="text-right">
-                        <p class="text-xs text-slate-400">Diperbarui</p>
-                        <p class="text-xs font-medium text-slate-600">{{ $penilaian->updated_at->isoFormat('D MMM Y') }}</p>
+                        <p class="text-xs text-slate-400">Dinilai</p>
+                        <p class="text-xs font-medium text-slate-600">{{ $penilaian->created_at->isoFormat('D MMM Y') }}</p>
+                        {{-- Ikon gembok terkunci --}}
+                        <div class="mt-2 flex justify-end">
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 text-xs font-medium">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                                Terkunci
+                            </span>
+                        </div>
                     </div>
+                </div>
+
+                {{-- Pesan nilai terkunci --}}
+                <div class="mx-5 mt-3 mb-1 flex items-start gap-2 rounded-xl bg-amber-50 border border-amber-200 px-4 py-3">
+                    <svg class="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                    <p class="text-xs text-amber-700 leading-relaxed">
+                        Nilai sudah diberikan dan <strong>tidak dapat diubah</strong>. Hubungi admin jika terjadi kesalahan.
+                    </p>
                 </div>
                 @endif
 
+                @if($penilaian)
+                {{-- Form disembunyikan jika nilai sudah ada --}}
+                <div class="p-5">
+                    <p class="text-center text-sm text-slate-400 py-4">Form penilaian tidak tersedia karena nilai sudah dikunci.</p>
+                </div>
+                @else
                 <form action="{{ route('pembimbing.logbook.nilai', $pemagang->nik) }}" method="POST" class="p-5 space-y-4">
                     @csrf
 
-                    {{-- Validation errors --}}
+                    {{-- Validasi error --}}
                     @if($errors->any())
                     <div class="rounded-lg bg-red-50 border border-red-200 px-3 py-2">
                         @foreach($errors->all() as $err)
                             <p class="text-xs text-red-600">• {{ $err }}</p>
                         @endforeach
+                    </div>
+                    @endif
+
+                    {{-- Info periode aktif --}}
+                    @if($periodeAktif)
+                    <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-purple-50 border border-purple-100">
+                        <svg class="w-4 h-4 text-purple-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <div>
+                            <p class="text-xs text-slate-500">Periode Aktif</p>
+                            <p class="text-xs font-semibold text-purple-700">{{ $periodeAktif->nama }}</p>
+                        </div>
+                    </div>
+                    @else
+                    <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-50 border border-amber-200">
+                        <svg class="w-4 h-4 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                        </svg>
+                        <p class="text-xs text-amber-700">Tidak ada periode magang yang aktif saat ini.</p>
                     </div>
                     @endif
 
@@ -132,13 +196,13 @@
                                 id="nilaiSlider"
                                 name="nilai"
                                 min="0" max="100" step="1"
-                                value="{{ old('nilai', $penilaian->nilai ?? 75) }}"
+                                value="{{ old('nilai', 75) }}"
                                 class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-purple-600"
                                 oninput="updateNilai(this.value)"
                             />
                             <div class="w-14 h-10 flex items-center justify-center rounded-xl bg-purple-50 border border-purple-200">
                                 <span id="nilaiDisplay" class="font-outfit font-bold text-purple-700 text-lg">
-                                    {{ old('nilai', $penilaian->nilai ?? 75) }}
+                                    {{ old('nilai', 75) }}
                                 </span>
                             </div>
                         </div>
@@ -158,7 +222,7 @@
                             rows="4"
                             placeholder="Tuliskan feedback atau komentar untuk pemagang..."
                             class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/30 focus:border-purple-500 resize-none transition-all"
-                        >{{ old('catatan', $penilaian->catatan ?? '') }}</textarea>
+                        >{{ old('catatan', '') }}</textarea>
                     </div>
 
                     <button type="submit"
@@ -166,9 +230,10 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                         </svg>
-                        {{ $penilaian ? 'Perbarui Nilai' : 'Simpan Nilai' }}
+                        Simpan Nilai
                     </button>
                 </form>
+                @endif
 
                 {{-- Panduan nilai --}}
                 <div class="px-5 pb-5">
@@ -226,6 +291,30 @@
                                         {{ \Carbon\Carbon::parse($lb->tanggal)->isoFormat('dddd, D MMMM Y') }}
                                     </span>
                                     <p class="text-slate-700 text-sm leading-relaxed whitespace-pre-line">{{ $lb->kegiatann_hari_ini }}</p>
+
+                                    {{-- Foto dokumentasi --}}
+                                    @if($lb->foto)
+                                    <div class="mt-3">
+                                        <button type="button" onclick="bukaFotoPembimbing('{{ asset('storage/' . $lb->foto) }}')"
+                                                class="group relative inline-block">
+                                            <img src="{{ asset('storage/' . $lb->foto) }}"
+                                                 alt="Foto dokumentasi"
+                                                 class="h-28 w-auto max-w-xs rounded-xl object-cover border border-slate-200 shadow-sm group-hover:scale-105 group-hover:shadow-md transition-all duration-200"/>
+                                            <span class="absolute inset-0 rounded-xl bg-black/0 group-hover:bg-black/20 transition-all duration-200 flex items-center justify-center">
+                                                <svg class="w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                        <p class="text-xs text-slate-400 mt-1 flex items-center gap-1">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                            </svg>
+                                            Foto dokumentasi · klik untuk perbesar
+                                        </p>
+                                    </div>
+                                    @endif
+
                                     <p class="text-slate-400 text-xs mt-2">Dicatat: {{ $lb->created_at->isoFormat('D MMM Y, HH:mm') }}</p>
                                 </div>
                             </div>
@@ -272,7 +361,40 @@
         badge.className = 'mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ' + p.color;
     }
 
-    // Init on load
-    updateNilai(document.getElementById('nilaiSlider').value);
+    // Init slider hanya jika form tersedia (nilai belum dikunci)
+    const slider = document.getElementById('nilaiSlider');
+    if (slider) updateNilai(slider.value);
+
+    // ── Lightbox foto dokumentasi ─────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.createElement('div');
+        modal.id = 'lightboxPembimbing';
+        modal.setAttribute('onclick', 'tutupFotoPembimbing()');
+        modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm hidden p-4';
+        modal.innerHTML = `
+            <div class="relative max-w-3xl w-full" onclick="event.stopPropagation()">
+                <button onclick="tutupFotoPembimbing()"
+                        class="absolute -top-10 right-0 text-white/70 hover:text-white transition-colors">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+                <img id="lightboxPembimbingImg" src="" alt="Foto Dokumentasi"
+                     class="w-full rounded-2xl shadow-2xl object-contain max-h-[80vh]"/>
+            </div>`;
+        document.body.appendChild(modal);
+    });
+
+    function bukaFotoPembimbing(url) {
+        document.getElementById('lightboxPembimbingImg').src = url;
+        document.getElementById('lightboxPembimbing').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    function tutupFotoPembimbing() {
+        document.getElementById('lightboxPembimbing').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') tutupFotoPembimbing(); });
 </script>
 @endsection
+

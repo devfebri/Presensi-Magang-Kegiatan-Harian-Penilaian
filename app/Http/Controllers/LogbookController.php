@@ -6,6 +6,7 @@ use App\Models\Logbook;
 use App\Models\PenilaianLogbook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class LogbookController extends Controller
 {
@@ -53,10 +54,14 @@ class LogbookController extends Controller
         $request->validate([
             'tanggal'            => 'required|date',
             'kegiatann_hari_ini' => 'required|string|min:10',
+            'foto'               => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ], [
             'tanggal.required'            => 'Tanggal wajib diisi.',
             'kegiatann_hari_ini.required' => 'Kegiatan hari ini wajib diisi.',
             'kegiatann_hari_ini.min'      => 'Kegiatan minimal 10 karakter.',
+            'foto.image'                  => 'File harus berupa gambar.',
+            'foto.mimes'                  => 'Format foto harus JPG, JPEG, PNG, atau WEBP.',
+            'foto.max'                    => 'Ukuran foto maksimal 5 MB.',
         ]);
 
         $user = Auth::guard('pemagang')->user();
@@ -72,11 +77,18 @@ class LogbookController extends Controller
             ])->withInput();
         }
 
+        // Upload foto jika ada
+        $fotoPath = null;
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('logbook-foto', 'public');
+        }
+
         Logbook::create([
             'nik'                => $user->nik,
             'instansi_id'        => $user->instansi_id,
             'tanggal'            => $request->tanggal,
             'kegiatann_hari_ini' => $request->kegiatann_hari_ini,
+            'foto'               => $fotoPath,
         ]);
 
         return redirect()->route('pemagang.logbook')
@@ -106,10 +118,14 @@ class LogbookController extends Controller
         $request->validate([
             'tanggal'            => 'required|date',
             'kegiatann_hari_ini' => 'required|string|min:10',
+            'foto'               => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ], [
             'tanggal.required'            => 'Tanggal wajib diisi.',
             'kegiatann_hari_ini.required' => 'Kegiatan hari ini wajib diisi.',
             'kegiatann_hari_ini.min'      => 'Kegiatan minimal 10 karakter.',
+            'foto.image'                  => 'File harus berupa gambar.',
+            'foto.mimes'                  => 'Format foto harus JPG, JPEG, PNG, atau WEBP.',
+            'foto.max'                    => 'Ukuran foto maksimal 5 MB.',
         ]);
 
         $user    = Auth::guard('pemagang')->user();
@@ -129,9 +145,27 @@ class LogbookController extends Controller
             ])->withInput();
         }
 
+        $fotoPath = $logbook->foto; // default: pertahankan foto lama
+
+        // Hapus foto lama jika diminta
+        if ($request->boolean('hapus_foto') && $logbook->foto) {
+            Storage::disk('public')->delete($logbook->foto);
+            $fotoPath = null;
+        }
+
+        // Ganti foto jika ada upload baru
+        if ($request->hasFile('foto')) {
+            // Hapus foto lama dulu
+            if ($logbook->foto) {
+                Storage::disk('public')->delete($logbook->foto);
+            }
+            $fotoPath = $request->file('foto')->store('logbook-foto', 'public');
+        }
+
         $logbook->update([
             'tanggal'            => $request->tanggal,
             'kegiatann_hari_ini' => $request->kegiatann_hari_ini,
+            'foto'               => $fotoPath,
         ]);
 
         return redirect()->route('pemagang.logbook')
@@ -147,6 +181,11 @@ class LogbookController extends Controller
         $logbook = Logbook::where('id', $id)
             ->where('nik', $user->nik)
             ->firstOrFail();
+
+        // Hapus foto dari storage
+        if ($logbook->foto) {
+            Storage::disk('public')->delete($logbook->foto);
+        }
 
         $logbook->delete();
 

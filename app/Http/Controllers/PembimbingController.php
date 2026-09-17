@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Logbook;
 use App\Models\Pemagang;
 use App\Models\PenilaianLogbook;
+use App\Models\PeriodeMagang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -52,9 +53,11 @@ class PembimbingController extends Controller
 
         $namaInstansi = DB::table('instansi')->where('id', $instansiId)->value('nama');
 
+        $periodeMagang = PeriodeMagang::where('is_aktif', true)->first();
+
         return view('pembimbing.dashboard', compact(
             'title', 'pembimbing', 'totalPemagang', 'hadir',
-            'rekapBulanIni', 'daftarPemagang', 'namaInstansi'
+            'rekapBulanIni', 'daftarPemagang', 'namaInstansi', 'periodeMagang'
         ));
     }
 
@@ -108,9 +111,12 @@ class PembimbingController extends Controller
 
         $totalLogbook = Logbook::where('nik', $nik)->count();
 
+        // Periode magang yang sedang aktif
+        $periodeAktif = PeriodeMagang::where('is_aktif', true)->first();
+
         return view('pembimbing.logbook.show', compact(
             'title', 'pembimbing', 'namaInstansi', 'pemagang',
-            'logbooks', 'penilaian', 'totalLogbook'
+            'logbooks', 'penilaian', 'totalLogbook', 'periodeAktif'
         ));
     }
 
@@ -119,6 +125,24 @@ class PembimbingController extends Controller
      */
     public function nilaiLogbook(Request $request, $nik)
     {
+        $pembimbing = Auth::guard('pembimbing')->user();
+        $instansiId = $pembimbing->instansi_id;
+
+        // Pastikan pemagang satu instansi
+        Pemagang::where('nik', $nik)
+            ->where('instansi_id', $instansiId)
+            ->firstOrFail();
+
+        // Cek apakah nilai sudah pernah diberikan — jika sudah, nilai dikunci
+        $existing = PenilaianLogbook::where('pembimbing_id', $pembimbing->id)
+            ->where('nik', $nik)
+            ->first();
+
+        if ($existing) {
+            return redirect()->route('pembimbing.logbook.pemagang', $nik)
+                ->with('error', 'Nilai sudah pernah diberikan dan tidak dapat diubah.');
+        }
+
         $request->validate([
             'nilai'   => 'required|integer|min:0|max:100',
             'catatan' => 'nullable|string|max:1000',
@@ -128,26 +152,18 @@ class PembimbingController extends Controller
             'nilai.max'      => 'Nilai maksimal 100.',
         ]);
 
-        $pembimbing = Auth::guard('pembimbing')->user();
-        $instansiId = $pembimbing->instansi_id;
+        // Ambil periode aktif saat ini
+        $periodeAktif = PeriodeMagang::where('is_aktif', true)->first();
 
-        // Pastikan pemagang satu instansi
-        Pemagang::where('nik', $nik)
-            ->where('instansi_id', $instansiId)
-            ->firstOrFail();
-
-        PenilaianLogbook::updateOrCreate(
-            [
-                'pembimbing_id' => $pembimbing->id,
-                'nik'           => $nik,
-            ],
-            [
-                'nilai'   => $request->nilai,
-                'catatan' => $request->catatan,
-            ]
-        );
+        PenilaianLogbook::create([
+            'pembimbing_id' => $pembimbing->id,
+            'nik'           => $nik,
+            'periode_id'    => $periodeAktif?->id,
+            'nilai'         => $request->nilai,
+            'catatan'       => $request->catatan,
+        ]);
 
         return redirect()->route('pembimbing.logbook.pemagang', $nik)
-            ->with('success', 'Penilaian logbook berhasil disimpan!');
+            ->with('success', 'Penilaian logbook berhasil disimpan! Nilai tidak dapat diubah.');
     }
 }

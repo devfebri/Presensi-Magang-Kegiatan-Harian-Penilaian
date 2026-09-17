@@ -11,6 +11,7 @@ class PenilaianLogbook extends Model
     protected $fillable = [
         'pembimbing_id',
         'nik',
+        'periode_id',
         'nilai',
         'catatan',
     ];
@@ -23,6 +24,11 @@ class PenilaianLogbook extends Model
     public function pemagang()
     {
         return $this->belongsTo(Pemagang::class, 'nik', 'nik');
+    }
+
+    public function periode()
+    {
+        return $this->belongsTo(PeriodeMagang::class, 'periode_id');
     }
 
     /**

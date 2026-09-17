@@ -25,6 +25,51 @@
         </div>
     </div>
 
+    {{-- ===== PERIODE MAGANG AKTIF ===== --}}
+    @if($periodeMagang)
+    <div class="bg-gradient-to-r from-sky-500 to-indigo-600 rounded-2xl px-6 py-4 shadow-md shadow-sky-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-sky-100 uppercase tracking-wider">Periode Magang Aktif</p>
+                <p class="text-base font-bold text-white leading-tight">{{ $periodeMagang->nama }}</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+            <div class="flex items-center gap-2 bg-white/15 border border-white/20 rounded-xl px-3 py-1.5 text-sm text-white font-medium">
+                <svg class="w-4 h-4 text-sky-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                {{ \Carbon\Carbon::parse($periodeMagang->tanggal_mulai)->translatedFormat('d M Y') }}
+            </div>
+            <span class="text-sky-200 font-bold">→</span>
+            <div class="flex items-center gap-2 bg-white/15 border border-white/20 rounded-xl px-3 py-1.5 text-sm text-white font-medium">
+                <svg class="w-4 h-4 text-sky-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                {{ \Carbon\Carbon::parse($periodeMagang->tanggal_selesai)->translatedFormat('d M Y') }}
+            </div>
+            @php
+                $hariTersisa = \Carbon\Carbon::now()->startOfDay()->diffInDays(\Carbon\Carbon::parse($periodeMagang->tanggal_selesai)->startOfDay(), false);
+            @endphp
+            @if($hariTersisa >= 0)
+                <div class="bg-white/20 rounded-xl px-3 py-1.5 text-sm text-white font-bold">
+                    {{ $hariTersisa }} hari lagi
+                </div>
+            @else
+                <div class="bg-red-400/30 rounded-xl px-3 py-1.5 text-sm text-white font-bold">
+                    Telah berakhir
+                </div>
+            @endif
+        </div>
+    </div>
+    @endif
+
     {{-- ===== ROW 1: JAM KERJA + PRESENSI HARI INI ===== --}}
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
 

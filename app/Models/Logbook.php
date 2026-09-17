@@ -16,6 +16,7 @@ class Logbook extends Model
         'instansi_id',
         'tanggal',
         'kegiatann_hari_ini',
+        'foto',
     ];
 
     protected $casts = [

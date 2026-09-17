@@ -35,8 +35,9 @@
                 </div>
                 @endif
 
-                <form action="{{ route('pemagang.logbook.update', $logbook->id) }}" method="POST" class="space-y-6">
+                <form action="{{ route('pemagang.logbook.update', $logbook->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
+                    @method('PUT')
 
                     {{-- Tanggal --}}
                     <div>
@@ -82,6 +83,69 @@
                         </div>
                     </div>
 
+                    {{-- Foto Dokumentasi --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                            Foto Dokumentasi <span class="text-slate-400 font-normal">(opsional)</span>
+                        </label>
+
+                        @if($logbook->foto)
+                        {{-- Foto yang sudah ada --}}
+                        <div id="fotoLamaWrapper" class="mb-4 rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 p-4">
+                            <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                Foto Saat Ini
+                            </p>
+                            <img src="{{ asset('storage/' . $logbook->foto) }}" alt="Foto logbook"
+                                 class="max-h-56 rounded-xl object-contain shadow-sm mb-3"/>
+                            <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+                                <input type="checkbox" id="hapus_foto" name="hapus_foto" value="1"
+                                       onchange="toggleHapusFoto(this)"
+                                       class="w-4 h-4 rounded border-slate-300 text-red-500 accent-red-500"/>
+                                <span class="text-sm text-red-600 dark:text-red-400 font-medium">Hapus foto ini</span>
+                            </label>
+                        </div>
+                        @endif
+
+                        {{-- Drop zone untuk foto baru --}}
+                        <div id="dropZone"
+                             class="relative border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-2xl p-6 text-center cursor-pointer transition-all hover:border-sky-400 hover:bg-sky-50/50 dark:hover:bg-sky-900/10 @error('foto') border-red-400 @enderror"
+                             onclick="document.getElementById('foto').click()">
+
+                            <div id="dropPlaceholder">
+                                <div class="w-14 h-14 rounded-2xl bg-sky-50 dark:bg-sky-900/30 flex items-center justify-center mx-auto mb-3">
+                                    <svg class="w-7 h-7 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
+                                <p class="text-sm font-semibold text-slate-600 dark:text-slate-300">
+                                    {{ $logbook->foto ? 'Ganti dengan foto baru' : 'Klik atau seret foto ke sini' }}
+                                </p>
+                                <p class="text-xs text-slate-400 mt-1">JPG, JPEG, PNG, WEBP — Maks. 5 MB</p>
+                            </div>
+
+                            <div id="previewWrapper" class="hidden">
+                                <img id="previewImg" src="#" alt="Preview"
+                                     class="mx-auto max-h-64 rounded-xl object-contain shadow-md"/>
+                                <p id="previewName" class="mt-2 text-xs text-slate-500 truncate"></p>
+                                <button type="button" onclick="hapusPreview(event)"
+                                        class="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 text-red-600 text-xs font-semibold hover:bg-red-100 transition-colors">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                    Batalkan Pilihan
+                                </button>
+                            </div>
+                        </div>
+
+                        <input type="file" id="foto" name="foto" accept="image/*" class="hidden" onchange="tampilkanPreview(this)"/>
+                        @error('foto')
+                            <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     {{-- Info timestamps --}}
                     <div class="rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 px-4 py-3 flex flex-wrap gap-4 text-xs text-slate-400 dark:text-slate-500">
                         <span>
@@ -117,6 +181,7 @@
 
 @section("js")
 <script>
+    // ── Character counter ──────────────────────────────────────────────────────
     const textarea = document.getElementById('kegiatann_hari_ini');
     const counter  = document.getElementById('charCount');
 
@@ -124,8 +189,65 @@
         counter.textContent = textarea.value.length + ' karakter';
         counter.className = 'text-xs ' + (textarea.value.length < 10 ? 'text-red-400' : 'text-emerald-500');
     }
-
     textarea.addEventListener('input', updateCounter);
     updateCounter();
+
+    // ── Hapus foto checkbox ────────────────────────────────────────────────────
+    function toggleHapusFoto(checkbox) {
+        const dz = document.getElementById('dropZone');
+        if (checkbox.checked) {
+            dz.style.opacity = '0.4';
+            dz.style.pointerEvents = 'none';
+            document.getElementById('foto').value = '';
+            document.getElementById('previewWrapper').classList.add('hidden');
+            document.getElementById('dropPlaceholder').classList.remove('hidden');
+        } else {
+            dz.style.opacity = '';
+            dz.style.pointerEvents = '';
+        }
+    }
+
+    // ── Foto preview ──────────────────────────────────────────────────────────
+    function tampilkanPreview(input) {
+        if (!input.files || !input.files[0]) return;
+        // Batalkan hapus foto lama jika pilih baru
+        const hapusCb = document.getElementById('hapus_foto');
+        if (hapusCb) { hapusCb.checked = false; toggleHapusFoto(hapusCb); }
+
+        const file   = input.files[0];
+        const reader = new FileReader();
+        reader.onload = e => {
+            document.getElementById('previewImg').src = e.target.result;
+            document.getElementById('previewName').textContent = file.name + ' (' + (file.size / 1024 / 1024).toFixed(2) + ' MB)';
+            document.getElementById('dropPlaceholder').classList.add('hidden');
+            document.getElementById('previewWrapper').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function hapusPreview(e) {
+        e.stopPropagation();
+        document.getElementById('foto').value = '';
+        document.getElementById('previewImg').src = '#';
+        document.getElementById('dropPlaceholder').classList.remove('hidden');
+        document.getElementById('previewWrapper').classList.add('hidden');
+    }
+
+    // ── Drag & drop ───────────────────────────────────────────────────────────
+    const dropZone = document.getElementById('dropZone');
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('border-sky-400','bg-sky-50/50'); });
+    dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('border-sky-400','bg-sky-50/50'); });
+    dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.classList.remove('border-sky-400','bg-sky-50/50');
+        const dt   = e.dataTransfer;
+        const file = dt.files[0];
+        if (!file || !file.type.startsWith('image/')) return;
+        const input = document.getElementById('foto');
+        const dT    = new DataTransfer();
+        dT.items.add(file);
+        input.files = dT.files;
+        tampilkanPreview(input);
+    });
 </script>
 @endsection
